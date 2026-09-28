@@ -1,0 +1,160 @@
+/* See docs/research/components/social-links.spec.md. */
+
+.socials {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.light {
+  color: #fff;
+  --social-bg: rgba(255, 255, 255, 0.1);
+  --social-fill: #fff;
+  --social-glyph-hover: var(--dark);
+}
+
+.dark {
+  color: #000;
+  --social-bg: color-mix(in srgb, var(--grey-400) 10%, transparent);
+  --social-fill: var(--grey-400);
+  --social-glyph-hover: #fff;
+}
+
+@media (max-width: 1024px) {
+  .dark {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+.item {
+  --button-circle-x: 50%;
+  --button-circle-y: 50%;
+  --button-circle-size: 160px;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background: var(--social-bg);
+  color: currentColor;
+  text-decoration: none;
+}
+
+/* The global link colours must not reach the glyph. */
+.item:link,
+.item:visited {
+  color: currentColor;
+}
+
+.bg,
+.circleWrap {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.bg {
+  z-index: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+
+.circleWrap {
+  z-index: 1;
+  overflow: hidden;
+}
+
+.circle {
+  position: absolute;
+  top: var(--button-circle-y);
+  left: var(--button-circle-x);
+  width: var(--button-circle-size);
+  height: var(--button-circle-size);
+  min-width: calc(220% + 1rem);
+  min-height: calc(220% + 1rem);
+  border-radius: 999px;
+  background: var(--social-fill);
+  transform: translate(-50%, -50%) scale(0);
+  transform-origin: center;
+  transition:
+    transform 0.72s cubic-bezier(0.625, 0.05, 0, 1),
+    width 0.72s cubic-bezier(0.625, 0.05, 0, 1),
+    height 0.72s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.icon {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.icon svg {
+  display: block;
+  flex-shrink: 0;
+  width: auto;
+  height: 1.25rem;
+  transition: color 0.4s ease-in-out;
+}
+
+/* The contact panel's version: smaller, bordered, fainter. */
+.compact {
+  gap: 0.45rem;
+}
+
+.compact .item {
+  width: 2.65rem;
+  border: 1px solid rgba(168, 174, 188, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.compact .icon svg {
+  height: 0.92rem;
+}
+
+.compact.light {
+  --social-glyph-hover: #000;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .item:hover .circle {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .item:hover .icon svg {
+    color: var(--social-glyph-hover);
+  }
+}
+
+.item:focus-visible {
+  outline-offset: 2px;
+}
+
+.item:focus-visible .circle {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.item:focus-visible .icon svg {
+  color: var(--social-glyph-hover);
+}
+
+@media (max-width: 767px) {
+  .icon svg {
+    height: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circle,
+  .bg,
+  .icon svg {
+    transition-duration: 0.01ms;
+  }
+}

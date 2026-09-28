@@ -165,6 +165,8 @@ export function Stage({ sections, children }: StageProps) {
       const origin = event.target as HTMLElement | null;
       // Controls that use the keys themselves keep them (fields, sliders, the sound pill).
       if (origin?.closest("input, textarea, select, [contenteditable='true'], [role='slider'], [data-own-keys]")) return;
+      // Space presses a focused button or link; it must not also move the page.
+      if (event.key === " " && origin?.closest("button, a[href], [role='button'], summary")) return;
       const step = stageProgress.get().step;
       let target: number | null = null;
       if (["ArrowDown", "PageDown"].includes(event.key) || (event.key === " " && !event.shiftKey)) {

@@ -1,0 +1,73 @@
+/* See docs/research/components/tag.spec.md. */
+
+.tag {
+  --cta-shift-x: 0px;
+  --cta-shift-y: 0px;
+  --cta-scale: 1;
+  --cta-tilt-x: 0deg;
+  --cta-tilt-y: 0deg;
+  --cta-pointer-x: 50%;
+  --cta-pointer-y: 50%;
+  --cta-glow-alpha: 0;
+
+  position: relative;
+  width: fit-content;
+  margin: 0 0 1rem;
+  padding: 0.35rem 1rem;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--grey-600);
+  color: #fff;
+  font-family: var(--font-mono);
+  /* Tailwind's text-sm */
+  font-size: 0.875rem;
+  line-height: calc(1.25 / 0.875);
+  word-spacing: var(--word-spacing-mono);
+  list-style: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 12px 24px rgba(7, 10, 18, 0.12);
+  transform: perspective(760px)
+    translate3d(calc(var(--cta-shift-x) * 0.48), calc(var(--cta-shift-y) * 0.48), 0)
+    rotateX(var(--cta-tilt-x)) rotateY(var(--cta-tilt-y)) scale(var(--cta-scale));
+  transition:
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tag::before {
+  content: "";
+  position: absolute;
+  inset: -24%;
+  pointer-events: none;
+  background: radial-gradient(
+    12rem circle at var(--cta-pointer-x) var(--cta-pointer-y),
+    rgba(255, 255, 255, calc(var(--cta-glow-alpha) * 1.2)) 0%,
+    rgba(255, 255, 255, calc(var(--cta-glow-alpha) * 0.22)) 22%,
+    rgba(255, 255, 255, 0) 62%
+  );
+  mix-blend-mode: screen;
+  opacity: calc(var(--cta-glow-alpha) * 2.3);
+  transform: translate3d(calc(var(--cta-shift-x) * -0.2), calc(var(--cta-shift-y) * -0.2), 0);
+  transition:
+    opacity 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 2245px) {
+  .tag {
+    /* Tailwind's text-xl */
+    font-size: 1.25rem;
+    line-height: calc(1.75 / 1.25);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag,
+  .tag::before {
+    transition: none;
+    transform: none;
+  }
+}

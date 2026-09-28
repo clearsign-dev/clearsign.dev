@@ -27,8 +27,8 @@ moves.
 | Severity CRITICAL / BLIND (content, not chrome) | — | `#e5484d` / `#d9a23a` | `--sev-critical`, `--sev-blind` |
 
 The severity colours exist because the proof section prints ClearSign's real
-output, where CRITICAL has to read as an alarm. They are content colours, used
-only inside output blocks, never for chrome.
+output, where CRITICAL has to read as an alarm. They are status colours: used
+inside output blocks and for form validation errors, never for decoration.
 
 ## Type
 

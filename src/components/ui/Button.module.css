@@ -1,0 +1,457 @@
+/* Clipped-corner button. See docs/research/components/button.spec.md. */
+
+.button {
+  --button-bg: var(--dark);
+  --button-accent: var(--accent);
+  --button-text: #fff;
+  --button-text-hover: var(--dark);
+  --glitch-bg: var(--accent);
+  --button-circle-x: 50%;
+  --button-circle-y: 50%;
+  --button-circle-size: 160px;
+  --button-enter-y: 0px;
+  --cta-shift-x: 0px;
+  --cta-shift-y: 0px;
+  --cta-scale: 1;
+  --cta-tilt-x: 0deg;
+  --cta-tilt-y: 0deg;
+  --cta-pointer-x: 50%;
+  --cta-pointer-y: 50%;
+  --cta-glow-alpha: 0;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+  padding: 1rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--button-text);
+  font-family: var(--font-mono);
+  font-size: inherit;
+  word-spacing: var(--word-spacing-mono);
+  text-decoration: none;
+  cursor: pointer;
+  clip-path: var(--clip-corner);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform: translate3d(var(--cta-shift-x), calc(var(--button-enter-y) + var(--cta-shift-y)), 0)
+    rotateX(var(--cta-tilt-x)) rotateY(var(--cta-tilt-y)) scale(var(--cta-scale));
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 18px 34px rgba(6, 8, 12, 0.2);
+  filter: saturate(1);
+  transition:
+    color 320ms var(--motion-ease-standard),
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Keyboard focus ring, inside the clipped shape. */
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  z-index: 4;
+  border: 1px solid currentColor;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Pointer glow plus a fixed sheen, screened over everything below the text. */
+.button::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      18rem circle at var(--cta-pointer-x) var(--cta-pointer-y),
+      rgba(255, 255, 255, calc(var(--cta-glow-alpha) * 1.45)) 0%,
+      rgba(255, 255, 255, calc(var(--cta-glow-alpha) * 0.42)) 18%,
+      rgba(255, 255, 255, 0) 52%
+    ),
+    linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.1) 4%,
+      rgba(255, 255, 255, 0.02) 28%,
+      rgba(255, 255, 255, 0.14) 54%,
+      rgba(255, 255, 255, 0) 76%
+    );
+  mix-blend-mode: screen;
+  opacity: calc(0.08 + var(--cta-glow-alpha) * 1.8);
+  transform: translate3d(calc(var(--cta-shift-x) * -0.24), calc(var(--cta-shift-y) * -0.24), 0);
+  transition:
+    opacity 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.accent {
+  --button-bg: var(--accent);
+  --button-accent: #fff;
+  --button-text: var(--on-accent);
+  --glitch-bg: #fff;
+}
+
+.button[data-cta-active] {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 24px 46px rgba(8, 10, 16, 0.32),
+    0 12px 30px rgb(var(--accent-rgb) / 0.16);
+  filter: saturate(1.08);
+}
+
+.button[data-cta-pressed] {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 12px 24px rgba(8, 10, 16, 0.22);
+}
+
+.button[aria-disabled="true"],
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Layers */
+
+.bg,
+.circleWrap,
+.glitch {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bg {
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0) 38%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 56%),
+    var(--button-bg);
+}
+
+.circleWrap {
+  z-index: 2;
+  overflow: hidden;
+}
+
+.circle {
+  position: absolute;
+  top: var(--button-circle-y);
+  left: var(--button-circle-x);
+  width: var(--button-circle-size);
+  height: var(--button-circle-size);
+  border-radius: 999px;
+  background: var(--button-accent);
+  transform: translate(-50%, -50%) scale(0);
+  transform-origin: center;
+  transition:
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glitch {
+  z-index: 2;
+  background: var(--glitch-bg);
+  opacity: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  width: 100%;
+  height: 100%;
+  padding: 0 1.25rem;
+  transform: translate3d(calc(var(--cta-shift-x) * 0.08), calc(var(--cta-shift-y) * 0.08), 18px);
+  transition:
+    color 320ms var(--motion-ease-standard),
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  color: currentColor;
+}
+
+.icon {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover (fine pointers) and keyboard focus: flood with the fill circle. */
+
+@media (hover: hover) and (pointer: fine) {
+  .button:not([aria-disabled="true"]):not(:disabled):hover {
+    color: var(--button-text-hover);
+  }
+
+  .button:not([aria-disabled="true"]):not(:disabled):hover .circle {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .button:not([aria-disabled="true"]):not(:disabled):hover .content {
+    transform: translate3d(calc(var(--cta-shift-x) * 0.12), calc(var(--cta-shift-y) * 0.12), 22px);
+  }
+
+  .button:not([aria-disabled="true"]):not(:disabled):hover .icon {
+    transform: translate3d(0.18rem, 0, 0) rotate(90deg);
+  }
+}
+
+.button:focus-visible {
+  outline: none;
+}
+
+.button:not([aria-disabled="true"]):not(:disabled):focus-visible {
+  color: var(--button-text-hover);
+}
+
+/* The clip-path would cut an outside ring, and the element's own outline paints
+   under its layers, so the focus ring is a pseudo-element above them. */
+.button:focus-visible::before {
+  opacity: 1;
+}
+
+.button:not([aria-disabled="true"]):not(:disabled):focus-visible .circle {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.button:not([aria-disabled="true"]):not(:disabled):focus-visible .icon {
+  transform: translate3d(0.18rem, 0, 0) rotate(90deg);
+}
+
+/* Glitch on entry: a few hard frames of slices in the glitch colour while the
+   label jitters. Horizontal slices on the flat button, vertical on the tab. */
+
+.button[data-glitch] .glitch {
+  animation: glitch-slices 360ms steps(1, end) both;
+}
+
+.button[data-glitch] .label {
+  animation: glitch-jitter 360ms steps(1, end) both;
+}
+
+.vertical[data-glitch] .glitch {
+  animation-name: glitch-slices-vertical;
+}
+
+.vertical[data-glitch] .label {
+  animation-name: glitch-jitter-vertical;
+}
+
+@keyframes glitch-slices {
+  0% {
+    opacity: 0.55;
+    clip-path: inset(14% 0 68% 0);
+    translate: -6px 0;
+  }
+  16% {
+    opacity: 0.4;
+    clip-path: inset(60% 0 22% 0);
+    translate: 5px 0;
+  }
+  32% {
+    opacity: 0.5;
+    clip-path: inset(32% 0 50% 0);
+    translate: -3px 0;
+  }
+  48% {
+    opacity: 0.3;
+    clip-path: inset(80% 0 6% 0);
+    translate: 4px 0;
+  }
+  64% {
+    opacity: 0.35;
+    clip-path: inset(4% 0 86% 0);
+    translate: -2px 0;
+  }
+  80% {
+    opacity: 0.2;
+    clip-path: inset(46% 0 42% 0);
+    translate: 2px 0;
+  }
+  100% {
+    opacity: 0;
+    clip-path: inset(0);
+    translate: 0 0;
+  }
+}
+
+@keyframes glitch-slices-vertical {
+  0% {
+    opacity: 0.55;
+    clip-path: inset(0 68% 0 14%);
+    translate: 0 -6px;
+  }
+  16% {
+    opacity: 0.4;
+    clip-path: inset(0 22% 0 60%);
+    translate: 0 5px;
+  }
+  32% {
+    opacity: 0.5;
+    clip-path: inset(0 50% 0 32%);
+    translate: 0 -3px;
+  }
+  48% {
+    opacity: 0.3;
+    clip-path: inset(0 6% 0 80%);
+    translate: 0 4px;
+  }
+  64% {
+    opacity: 0.35;
+    clip-path: inset(0 86% 0 4%);
+    translate: 0 -2px;
+  }
+  80% {
+    opacity: 0.2;
+    clip-path: inset(0 42% 0 46%);
+    translate: 0 2px;
+  }
+  100% {
+    opacity: 0;
+    clip-path: inset(0);
+    translate: 0 0;
+  }
+}
+
+@keyframes glitch-jitter {
+  0% {
+    translate: 2px 0;
+  }
+  20% {
+    translate: -2px 0;
+  }
+  40% {
+    translate: 1px 0;
+  }
+  60% {
+    translate: -1px 0;
+  }
+  80% {
+    translate: 0.5px 0;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+
+@keyframes glitch-jitter-vertical {
+  0% {
+    translate: 0 2px;
+  }
+  20% {
+    translate: 0 -2px;
+  }
+  40% {
+    translate: 0 1px;
+  }
+  60% {
+    translate: 0 -1px;
+  }
+  80% {
+    translate: 0 0.5px;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+
+/* Vertical tab (the header's "Get ClearSign"). */
+
+.vertical {
+  --button-enter-y: -110%;
+  gap: 1rem;
+  width: 3.5rem;
+  margin: 0;
+  padding: 1.4rem 1.25rem 1.9rem;
+  /* The header's tab size (Header.svelte), which is what the screenshots show;
+     Button.svelte's own vertical style says 1.1rem but is not what renders. */
+  font-size: 0.9rem;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    color 320ms var(--motion-ease-standard),
+    box-shadow 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1) 0.14s,
+    opacity 760ms cubic-bezier(0.16, 1, 0.3, 1) 0.14s;
+}
+
+.revealed {
+  --button-enter-y: 0px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.vertical .content {
+  padding: 0;
+  gap: 1rem;
+}
+
+/* Flipped so the label reads bottom-to-top, with the icon at the foot. */
+.vertical .label {
+  transform: scale(-1, -1);
+}
+
+.vertical .icon {
+  width: 1em;
+  height: 1em;
+}
+
+@media (max-width: 390px) {
+  .vertical {
+    width: 3.1rem;
+    font-size: 1rem;
+  }
+}
+
+/* On the tab the icon only turns; it does not also slide. */
+@media (hover: hover) and (pointer: fine) {
+  .button.vertical:not([aria-disabled="true"]):not(:disabled):hover .icon {
+    transform: rotate(90deg);
+    transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+}
+
+.button.vertical:not([aria-disabled="true"]):not(:disabled):focus-visible .icon {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .button::after,
+  .circle,
+  .content,
+  .icon {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    animation-duration: 0.01ms !important;
+  }
+
+  .glitch,
+  .label {
+    animation: none !important;
+  }
+}

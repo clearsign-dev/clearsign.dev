@@ -264,6 +264,11 @@ export const CONTACT = {
     message: { label: "Message", placeholder: "Paste the transaction, or say what it got wrong" },
   },
   submit: "Send",
+  submitCursor: "Open mail",
+  errors: {
+    required: "Required",
+    email: "That doesn't look like an email address",
+  },
   sentNote: "Your mail client should have opened with this message in it.",
   credit: { prefix: "Layout after", name: "daoism.systems", href: "https://daoism.systems" },
   licence: "MIT OR Apache-2.0",
