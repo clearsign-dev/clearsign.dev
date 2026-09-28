@@ -1,0 +1,218 @@
+/* The custom cursor. Every layer is fixed, click-through and a sibling of the
+   others: a wrapper would isolate the dot's difference blend. z-indices are set
+   inline from CURSOR_Z_INDEX. */
+
+/* Put on <html> while the dot stands in for the native cursor. Form fields keep
+   their own cursor regardless. */
+.nativeHidden,
+.nativeHidden * {
+  cursor: none !important;
+}
+
+.nativeHidden :is(input, textarea, select, [contenteditable="true"]) {
+  cursor: auto !important;
+}
+
+.dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  will-change: transform;
+}
+
+/* A 2.4rem disc scaled down, so it is always drawn at its largest size.
+   Rest 1.2rem, pointer 2.4rem, grab ~2.16rem, grabbing ~1.68rem. */
+.size {
+  position: absolute;
+  top: -1.2rem;
+  left: -1.2rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  transform: scale(0.5);
+  transition: transform 0.16s ease;
+}
+
+.pointer .size {
+  transform: scale(1);
+}
+
+.grab .size {
+  transform: scale(0.9);
+}
+
+.grabbing .size {
+  transform: scale(0.7);
+}
+
+.core {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--ink);
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+  transition:
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.22s ease,
+    filter 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hidden .core {
+  opacity: 0;
+  transform: scale(0.38);
+  filter: blur(3px);
+}
+
+.grabbing {
+  mix-blend-mode: normal;
+}
+
+.grabbing .core {
+  background: var(--accent);
+}
+
+/* Labels */
+
+.label {
+  position: fixed;
+  margin: 0;
+  pointer-events: none;
+  padding: 0.3em 0.75em 0.4em;
+  border-radius: 0.25em;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.2;
+  word-spacing: var(--word-spacing-mono);
+  white-space: nowrap;
+}
+
+/* Rides under the dot; the wrapper is moved by the frame loop. */
+.follow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.labelFollow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, 0);
+  transform-origin: top center;
+  animation: follow-in 0.22s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Pinned beside the element that carries it; left/top set inline. */
+.labelRight {
+  transform: translate(0, -50%);
+  transform-origin: left center;
+  animation: anchor-in-right 0.22s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.labelLeft {
+  transform: translate(-100%, -50%);
+  transform-origin: right center;
+  animation: anchor-in-left 0.22s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes follow-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 6px) scale(0.92);
+  }
+}
+
+@keyframes anchor-in-right {
+  from {
+    opacity: 0;
+    transform: translate(0, calc(-50% + 6px)) scale(0.92);
+  }
+}
+
+@keyframes anchor-in-left {
+  from {
+    opacity: 0;
+    transform: translate(-100%, calc(-50% + 6px)) scale(0.92);
+  }
+}
+
+/* Bursts: a ripple where the pointer clicks, a ring around a control it enters. */
+
+.burst {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.ripple {
+  position: absolute;
+  top: -0.6rem;
+  left: -0.6rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 90%, transparent);
+  animation: ripple-out 0.45s ease-out forwards;
+}
+
+@keyframes ripple-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+.pulse {
+  position: absolute;
+  top: -0.7rem;
+  left: -0.7rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--ink) 42%, transparent);
+  animation: pulse-out 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+@keyframes pulse-out {
+  from {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.32);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .size,
+  .core {
+    transition: none;
+  }
+
+  .labelFollow,
+  .labelRight,
+  .labelLeft {
+    animation: none;
+  }
+}

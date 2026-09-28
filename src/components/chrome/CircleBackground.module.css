@@ -1,0 +1,156 @@
+/* Concentric rings behind the opening sections. Geometry and timing are in
+   circles/timeline.ts; everything moving is written inline from there. */
+
+.root {
+  position: fixed;
+  inset: 0;
+  /* Above the scene canvas (1), below the sections (12). */
+  z-index: 3;
+  pointer-events: none;
+  visibility: hidden;
+  contain: strict;
+  transform: translateZ(0);
+}
+
+@media (max-width: 767px) {
+  .root {
+    display: none;
+  }
+}
+
+/* The square the rings are measured from, centred; its width is scrubbed. */
+.item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 88%;
+  aspect-ratio: 1;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+/* Outer ring, crosshairs and side lines scale and fade as one unit. */
+.outer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale3d(var(--ring-scale, 1), var(--ring-scale, 1), 1);
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.scaled {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  aspect-ratio: 1;
+  opacity: 0;
+  transform: translate3d(-50%, -50%, 0) scale3d(var(--ring-scale, 1), var(--ring-scale, 1), 1);
+  will-change: transform, opacity;
+}
+
+.middle {
+  width: 80%;
+}
+
+.inner {
+  width: 60%;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ringOuter {
+  opacity: 0.5;
+}
+
+.ringMiddle {
+  opacity: 0.48;
+}
+
+.ringInner {
+  opacity: 0.65;
+}
+
+.crosshair {
+  position: absolute;
+  top: 50%;
+  width: 1.1rem;
+  aspect-ratio: 1;
+  margin: -0.55rem;
+  color: var(--ink);
+}
+
+.crosshair svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 767px) and (max-width: 1024px) {
+  .crosshair {
+    width: 3.5rem;
+    margin: -1.75rem;
+  }
+}
+
+.crosshairLeft {
+  left: 0;
+}
+
+.crosshairRight {
+  right: 0;
+}
+
+/* Hairlines running out from the crosshairs along the centre line. */
+.line {
+  position: absolute;
+  top: 50%;
+  width: 20vw;
+  height: 1px;
+  margin-top: -0.5px;
+  will-change: transform, opacity;
+}
+
+.lineLeft {
+  right: 100%;
+  transform-origin: right center;
+  background: linear-gradient(to left, color-mix(in srgb, var(--ink) 30%, transparent), transparent);
+}
+
+.lineRight {
+  left: 100%;
+  transform-origin: left center;
+  background: linear-gradient(to right, color-mix(in srgb, var(--ink) 30%, transparent), transparent);
+}
+
+/* The two small circles, just outside the square, tangent to the outer ring. */
+.side {
+  position: absolute;
+  top: 50%;
+  width: 50%;
+  aspect-ratio: 1;
+  opacity: 0;
+  transform: translate3d(0, -50%, 0);
+  will-change: opacity;
+}
+
+.sideLeft {
+  right: 100%;
+}
+
+.sideRight {
+  left: 100%;
+}
+
+.sideSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  opacity: 0.4;
+}

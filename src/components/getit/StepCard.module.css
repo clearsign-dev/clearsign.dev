@@ -1,0 +1,153 @@
+/* A step card. Desktop ≥ 1025px (matches isMobileTiming). */
+
+.card {
+  --edge-progress: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  background: var(--grey-600);
+  font-family: var(--font-mono);
+  color: var(--grey-300);
+  contain: layout style paint;
+  transform-origin: center bottom;
+  backface-visibility: hidden;
+}
+
+/* The edge: a rule along the top that draws in from the left. */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0.75rem;
+  right: 0.75rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgb(var(--accent-rgb) / 0.55), var(--hairline) 45%, transparent);
+  transform: scaleX(var(--edge-progress));
+  transform-origin: left center;
+  opacity: var(--edge-progress);
+  pointer-events: none;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.2;
+}
+
+.title {
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  word-spacing: var(--word-spacing-mono);
+  color: var(--ink);
+  backface-visibility: hidden;
+}
+
+.index {
+  flex-shrink: 0;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: var(--grey-300);
+  pointer-events: none;
+  user-select: none;
+  backface-visibility: hidden;
+}
+
+.desc {
+  --body-opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  backface-visibility: hidden;
+}
+
+.body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.35;
+  word-spacing: normal;
+  color: var(--grey-300);
+  opacity: var(--body-opacity);
+  text-wrap: pretty;
+}
+
+.desc > :global(*:not(p)) {
+  max-width: 100%;
+}
+
+.desc > div {
+  align-self: stretch;
+}
+
+.action {
+  margin-top: 0.125rem;
+}
+
+@media (min-width: 1025px) {
+  .card {
+    gap: 1rem;
+    padding: 1rem 1.25rem 1.5rem;
+  }
+
+  .card::before {
+    left: 1.25rem;
+    right: 1.25rem;
+  }
+
+  .header {
+    font-size: 1.125rem;
+  }
+
+  .body {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .desc {
+    gap: 0.875rem;
+  }
+}
+
+@media (min-width: 2245px) {
+  .header {
+    font-size: 1.375rem;
+  }
+
+  .body {
+    font-size: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  .index,
+  .title,
+  .desc {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .card::before {
+    opacity: 1;
+    transform: none;
+  }
+}

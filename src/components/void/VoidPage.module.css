@@ -1,0 +1,417 @@
+/* The 404 page. --four is the 4s' size (the reference's HeroHeading scale);
+   --ring is the aperture's box, from which the scene sizes its light. */
+
+.page {
+  --four: 25rem;
+  --ring: calc(var(--four) * 0.72);
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 1024px) {
+  .page {
+    --four: 12rem;
+  }
+}
+
+@media (max-width: 465px) {
+  .page {
+    --four: 8rem;
+  }
+}
+
+@media (max-width: 395px) {
+  .page {
+    --four: 6.5rem;
+  }
+}
+
+/* ---- 4 ◯ 4 ---------------------------------------------------------- */
+
+.heading {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-size: var(--four);
+  line-height: 1;
+  letter-spacing: 0;
+  pointer-events: none;
+  animation:
+    fade-in 0.85s ease 0.15s both,
+    grow-in 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both;
+}
+
+.digits {
+  display: flex;
+  align-items: center;
+}
+
+/* Dark glass with a highlight that follows the pointer (the reference's
+   HeroHeading), plus light from the aperture on each 4's inner side. With
+   line-height 1 the cap centre sits 0.026em below the box centre in Plex Mono;
+   lifting the 4s by that much centres them on the aperture. */
+.four {
+  position: relative;
+  top: -0.026em;
+  display: block;
+  background-image:
+    radial-gradient(
+      ellipse 70% 60% at var(--rim-x) 42%,
+      rgb(var(--accent-rgb) / 0.3),
+      rgb(var(--accent-rgb) / 0) 70%
+    ),
+    radial-gradient(
+      circle at var(--focus-x, 50%) var(--focus-y, 50%),
+      rgb(255 255 255 / calc(var(--glow-alpha, 0.18) + 0.15)) 0%,
+      rgb(255 255 255 / calc(var(--glow-alpha, 0.18) * 0.4)) 25%,
+      rgb(255 255 255 / 0) 60%
+    ),
+    linear-gradient(
+      118deg,
+      rgb(60 60 60 / 0.95) 0%,
+      rgb(15 15 15 / 0.98) 28%,
+      rgb(45 45 45 / 0.94) 52%,
+      rgb(5 5 5) 72%,
+      rgb(55 55 55 / 0.95) 100%
+    ),
+    linear-gradient(
+      128deg,
+      rgb(255 255 255 / 0) 10%,
+      rgb(255 255 255 / 0.22) 40%,
+      rgb(255 255 255 / 0.05) 55%,
+      rgb(255 255 255 / 0) 85%
+    );
+  background-repeat: no-repeat;
+  background-size:
+    100% 100%,
+    170% 170%,
+    140% 140%,
+    150% 150%;
+  background-position:
+    0 0,
+    calc(50% + var(--drift-x, 0px) * 0.8) calc(50% + var(--drift-y, 0px) * 0.8),
+    calc(50% + var(--drift-x, 0px)) calc(50% + var(--drift-y, 0px)),
+    calc(50% - var(--drift-x, 0px) * 0.55) calc(50% - var(--drift-y, 0px) * 0.35);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0.4px rgb(255 255 255 / 0.2);
+}
+
+.fourLeft {
+  --rim-x: 100%;
+}
+
+.fourRight {
+  --rim-x: 0%;
+}
+
+.slot {
+  position: relative;
+  flex: none;
+  width: 0.62em;
+  height: 1em;
+}
+
+/* The go-home dot at the aperture's centre (the reference's 53px hotspot,
+   scaled down with the ring on small screens). */
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(1.75rem, calc(var(--ring) * 0.185), 3.3125rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ground) 50%, transparent);
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  transition: transform 0.25s ease;
+}
+
+.dot::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20%;
+  height: 20%;
+  border-radius: 50%;
+  background: var(--ink);
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dot:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .dot:hover::after {
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+}
+
+/* ---- Go home -------------------------------------------------------- */
+
+.cta {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.ctaLabel {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: var(--display-weight);
+  line-height: 120%;
+  letter-spacing: var(--display-tracking);
+  text-transform: uppercase;
+  word-spacing: 25%;
+  color: var(--ink);
+  text-shadow: 0 0 1.2rem color-mix(in srgb, var(--ground) 45%, transparent);
+}
+
+.ctaNote {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  word-spacing: normal;
+  color: var(--grey-300);
+}
+
+@media (max-width: 767px) {
+  .cta {
+    padding: 0.45rem;
+    background: color-mix(in srgb, var(--dark) 1%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .ctaNote {
+    color: rgb(255 255 255 / 0.65);
+  }
+}
+
+/* ---- Chrome --------------------------------------------------------- */
+
+.logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  padding: var(--offset-x);
+}
+
+@media (max-width: 767px) {
+  .logo {
+    padding: 1rem var(--offset-x-phone);
+  }
+}
+
+.tracker {
+  position: absolute;
+  bottom: var(--offset-x);
+  left: var(--offset-x);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--grey-300) 30%, transparent);
+  border-radius: 0.25rem;
+  background: var(--grey-600);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  color: color-mix(in srgb, var(--grey-300), #fff 30%);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  font-weight: 400;
+}
+
+.diamond {
+  font-size: 0.46rem;
+  color: var(--grey-300);
+}
+
+@media (max-width: 1024px) {
+  .tracker {
+    top: var(--offset-x-phone);
+    right: var(--offset-x-phone);
+    bottom: auto;
+    left: auto;
+  }
+}
+
+.tagline {
+  position: absolute;
+  right: 1.25rem;
+  bottom: var(--offset-x);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 120%;
+  text-align: right;
+  word-spacing: normal;
+  color: var(--grey-300);
+}
+
+@media (max-width: 1024px) {
+  .tagline {
+    display: none;
+  }
+}
+
+/* ---- Entrances and exits ------------------------------------------- */
+
+.ui {
+  animation: fade-in 0.8s ease-out both;
+}
+
+.rulerIn {
+  z-index: 20;
+  animation: ruler-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+/* The game is open: the reference drops the CTA and the tagline. */
+.page[data-playing] .fadeWhilePlaying {
+  animation: fade-out 0.55s ease forwards;
+  pointer-events: none;
+}
+
+/* Going home: the UI lets go while the room rushes into the light, the light
+   floods the screen, then the screen goes to ground just before the new page. */
+.page[data-leaving] .ui {
+  animation: fade-out 1.2s ease-in 0.4s forwards;
+  pointer-events: none;
+}
+
+.page[data-leaving] .heading {
+  animation: heading-rush 1.8s cubic-bezier(0.6, 0, 0.9, 0.35) forwards;
+}
+
+.flash {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--ink) 0,
+    rgb(var(--accent-rgb) / 0.55) 22%,
+    rgb(var(--accent-rgb) / 0) 55%
+  );
+  opacity: 0;
+  pointer-events: none;
+  animation: flash-in 1.3s cubic-bezier(0.55, 0, 0.8, 0.3) forwards;
+}
+
+.blackout {
+  position: absolute;
+  inset: 0;
+  z-index: 41;
+  background: var(--ground);
+  opacity: 0;
+  pointer-events: none;
+  animation: fade-in 0.55s ease-in 1.2s forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes grow-in {
+  from {
+    transform: scale(0.86);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes ruler-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes heading-rush {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+@keyframes flash-in {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(3.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heading {
+    animation: fade-in 0.85s ease 0.15s both;
+  }
+
+  .rulerIn {
+    animation: fade-in 0.8s ease-out both;
+  }
+
+  .dot,
+  .dot::after {
+    transition: none;
+  }
+}

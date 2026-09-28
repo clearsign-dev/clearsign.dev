@@ -1,0 +1,400 @@
+/* A ship card. Breakpoints: desktop ≥ 1025px (matches isMobileTiming),
+   tablet 767–1024, phone ≤ 767. */
+
+.slot {
+  position: relative;
+  flex: none;
+}
+
+.surface {
+  position: relative;
+  backface-visibility: hidden;
+}
+
+.card {
+  --card-rotate-x: 0deg;
+  --card-rotate-y: 0deg;
+  --card-shift-x: 0px;
+  --card-shift-y: 0px;
+  --card-pointer-x: 50%;
+  --card-pointer-y: 50%;
+  --card-glow: 0;
+  --icon-shift-x: 0px;
+  --icon-shift-y: 0px;
+  --icon-scale: 1;
+  --icon-z: 24px;
+  --press-scale: 1;
+  --card-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+  background: var(--grey-600);
+  color: var(--ink);
+  transform-style: preserve-3d;
+  transform: perspective(1120px) translate3d(var(--card-shift-x), var(--card-shift-y), 0)
+    rotateX(var(--card-rotate-x)) rotateY(var(--card-rotate-y)) scale(var(--press-scale));
+  transition:
+    transform 460ms var(--card-ease),
+    box-shadow 460ms var(--card-ease),
+    background 420ms var(--card-ease);
+  will-change: transform;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ink) 5%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--ink) 3%, transparent),
+    0 18px 40px color-mix(in srgb, var(--ground) 18%, transparent);
+  clip-path: polygon(
+    1rem 0%,
+    100% 0,
+    100% calc(100% - 1rem),
+    calc(100% - 1rem) 100%,
+    0 100%,
+    0 1rem
+  );
+  touch-action: pan-y;
+}
+
+/* Pointer glow and sheen. */
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition:
+    opacity 380ms var(--card-ease),
+    transform 420ms var(--card-ease);
+}
+
+.card::before {
+  z-index: 0;
+  opacity: calc(var(--card-glow) * 1.05);
+  background:
+    radial-gradient(
+      34rem circle at var(--card-pointer-x) var(--card-pointer-y),
+      color-mix(in srgb, var(--ink) 22%, transparent) 0%,
+      color-mix(in srgb, var(--ink) 8%, transparent) 24%,
+      rgb(var(--accent-rgb) / 0.1) 45%,
+      rgb(var(--accent-rgb) / 0) 72%
+    ),
+    linear-gradient(135deg, color-mix(in srgb, var(--ink) 8%, transparent), transparent 44%);
+  mix-blend-mode: screen;
+}
+
+.card::after {
+  z-index: 1;
+  opacity: calc(var(--card-glow) * 0.92);
+  background:
+    linear-gradient(
+      115deg,
+      transparent 18%,
+      color-mix(in srgb, var(--ink) 16%, transparent) 48%,
+      color-mix(in srgb, var(--ink) 4%, transparent) 58%,
+      transparent 74%
+    ),
+    radial-gradient(
+      22rem circle at var(--card-pointer-x) var(--card-pointer-y),
+      color-mix(in srgb, var(--ink) 24%, transparent) 0%,
+      color-mix(in srgb, var(--ink) 8%, transparent) 18%,
+      transparent 52%
+    );
+  transform: translate3d(calc(var(--card-shift-x) * -0.18), calc(var(--card-shift-y) * -0.18), 1px);
+}
+
+.card[data-hovering] {
+  transition: none;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ink) 8%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--ink) 5%, transparent),
+    0 30px 64px color-mix(in srgb, var(--ground) 32%, transparent),
+    0 14px 30px rgb(var(--accent-rgb) / 0.12);
+}
+
+.card[data-releasing] {
+  transition:
+    transform 300ms var(--card-ease),
+    box-shadow 300ms var(--card-ease);
+}
+
+.number,
+.titleRow,
+.name,
+.tag,
+.icon,
+.detail {
+  position: relative;
+  z-index: 2;
+}
+
+.number {
+  grid-area: number;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  line-height: 1.1;
+  color: var(--grey-300);
+  font-size: 1rem;
+}
+
+.id {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.total {
+  font-family: var(--font-mono);
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: none;
+  word-spacing: var(--word-spacing-mono);
+  color: var(--ink);
+  text-align: left;
+  backface-visibility: hidden;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 0.375rem 0.75rem;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.icon {
+  grid-area: icon;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.iconReveal,
+.iconInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.iconInner {
+  transform: translate3d(var(--icon-shift-x), var(--icon-shift-y), var(--icon-z)) scale(var(--icon-scale));
+  transition: transform 520ms var(--card-ease);
+  will-change: transform;
+}
+
+.iconSvg {
+  display: block;
+  aspect-ratio: 1;
+  overflow: visible;
+  color: var(--ink);
+}
+
+.detail {
+  grid-area: detail;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  word-spacing: normal;
+  color: var(--grey-300);
+  text-wrap: pretty;
+  backface-visibility: hidden;
+}
+
+/* ≤ 1024: header row (number, tag), the name over a hairline, the icon
+   filling what is left, the note at the bottom. */
+@media (max-width: 1024px) {
+  .card {
+    width: min(48vw, 380px, 44svh);
+    aspect-ratio: 320 / 329;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "number tag"
+      "title title"
+      "icon icon"
+      "detail detail";
+    align-items: center;
+  }
+
+  .titleRow {
+    display: contents;
+  }
+
+  .name {
+    grid-area: title;
+    align-self: stretch;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .tag {
+    grid-area: tag;
+    justify-self: end;
+  }
+
+  .icon {
+    align-self: stretch;
+  }
+
+  .iconSvg {
+    width: auto;
+    height: 70%;
+    max-width: 60%;
+    max-height: 100%;
+  }
+
+  .detail {
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 767px) {
+  .card {
+    width: min(71.2vw, 320px);
+  }
+
+  .name {
+    font-size: 1.125rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+  }
+
+  .detail {
+    font-size: 0.8125rem;
+    line-height: 1.38;
+  }
+}
+
+/* Too narrow for the number and the tag side by side. */
+@media (max-width: 380px) {
+  .card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "number"
+      "tag"
+      "title"
+      "icon"
+      "detail";
+    gap: 0.75rem;
+  }
+
+  .tag {
+    justify-self: start;
+  }
+}
+
+/* Desktop: the index top-left; the name and its tag in the right-hand column
+   over one hairline; the icon centred; the note under the name's column. */
+@media (min-width: 1025px) {
+  .card {
+    width: 47vw;
+    aspect-ratio: 3 / 2;
+    /* The right column is at least 48% and grows to keep name and tag on one line. */
+    grid-template-columns: minmax(auto, 1fr) minmax(48%, max-content);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "number title"
+      ". ."
+      ". detail";
+    align-items: start;
+  }
+
+  .titleRow {
+    grid-area: title;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 0.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .name {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .tag {
+    flex: none;
+  }
+
+  .icon {
+    grid-area: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20%;
+    transform: translate(-50%, -50%);
+    display: block;
+  }
+
+  .iconReveal,
+  .iconInner {
+    height: auto;
+  }
+
+  .iconSvg {
+    width: 100%;
+    height: auto;
+  }
+
+  .detail {
+    /* Fills the column without widening it. */
+    contain: inline-size;
+    align-self: end;
+  }
+}
+
+@media (min-width: 2245px) {
+  .name {
+    font-size: 1.75rem;
+  }
+
+  .tag {
+    font-size: 1.125rem;
+  }
+
+  .id {
+    font-size: 2.6rem;
+  }
+
+  .detail {
+    font-size: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .iconInner,
+  .card::before,
+  .card::after {
+    transition: none;
+  }
+}

@@ -1,0 +1,25 @@
+/* The reference's mobile dock: on desktop it disappears from layout and each
+   instrument positions itself; on touch-sized screens it lines the section
+   tracker and the sound button up along the bottom edge. */
+.dock {
+  display: contents;
+}
+
+@media (max-width: 1024px) {
+  .dock {
+    position: fixed;
+    left: var(--offset-x-phone);
+    right: var(--offset-x-phone);
+    bottom: 1.25rem;
+    z-index: 101;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    pointer-events: none;
+  }
+
+  .dock > * {
+    pointer-events: auto;
+  }
+}

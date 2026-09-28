@@ -1,0 +1,157 @@
+/* 5 — How it ships. Desktop ≥ 1025px (matches isMobileTiming), tablet
+   767–1024, phone ≤ 767, small phone ≤ 390. */
+
+.ships {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+@media (min-width: 1025px) {
+  .ships {
+    padding-left: var(--offset-content);
+  }
+}
+
+@media (max-width: 767px) {
+  .ships {
+    height: 101%;
+    overflow: visible;
+  }
+}
+
+@media (min-width: 550px) and (max-width: 700px) {
+  .ships .heading {
+    font-size: 56px;
+  }
+}
+
+/* The [5] marker. */
+.ships > sup {
+  right: 1rem;
+}
+
+.desc {
+  position: absolute;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+@media (min-width: 1025px) {
+  .desc {
+    top: 43%;
+    left: var(--offset-content);
+    width: calc(100% - var(--offset-content));
+    text-align: left;
+  }
+}
+
+@media (max-width: 1024px) {
+  .desc {
+    position: relative;
+    top: 6.75rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .desc {
+    top: 6rem;
+  }
+}
+
+.copy {
+  will-change: transform;
+}
+
+/* Clear of the plus marker, which sits at the start of the first line. */
+@media (max-width: 767px) {
+  .copy {
+    padding-left: 1.25rem;
+  }
+}
+
+.paragraph {
+  margin: 0 0 0 auto;
+  color: var(--grey-300);
+}
+
+@media (min-width: 1025px) {
+  .paragraph {
+    padding-top: 1rem;
+  }
+}
+
+@media (min-width: 767px) and (max-width: 1024px) {
+  .paragraph {
+    margin-left: 3rem;
+  }
+}
+
+@media (min-width: 2245px) {
+  .paragraph {
+    max-width: 36ch;
+  }
+}
+
+.divider {
+  display: none;
+}
+
+@media (min-width: 1025px) {
+  .divider {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--hairline);
+    transform: scaleX(0);
+    transform-origin: right;
+    will-change: transform, opacity;
+  }
+}
+
+@media (min-width: 767px) and (max-width: 1024px) {
+  .desc .plus {
+    top: 0;
+    left: 0;
+  }
+}
+
+/* The card column: a column that travels up on desktop, a row that travels
+   sideways below that. Positioned against the section, not .ships. */
+.cards {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  display: flex;
+  gap: 1rem;
+  padding: 0 1rem;
+  transform-origin: left center;
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
+}
+
+@media (min-width: 1025px) {
+  .cards {
+    top: 0;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 15svh 0 1.25rem var(--offset-x);
+  }
+}
+
+@media (max-width: 1024px) {
+  .cards {
+    flex-direction: row;
+  }
+}
+
+/* Clear of the paragraph above on short phones. */
+@media (max-width: 767px) {
+  .cards {
+    top: max(24%, 10.5rem);
+  }
+}

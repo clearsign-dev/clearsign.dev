@@ -1,0 +1,355 @@
+/* Every layer is laid out around the viewport's centre, where the aperture
+   sits, and sized from --ring (the aperture's box, set by the page). The
+   ring's lower edge is 0.35 × --ring below the centre; the floor starts just
+   under it. */
+
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--ground);
+  pointer-events: none;
+  animation: scene-in 1.4s ease-out both;
+}
+
+.room {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  transition: transform 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.scene[data-hover] .room {
+  transform: scale(1.03);
+}
+
+/* Going home: the room rushes into the light. */
+.scene[data-leaving] .room {
+  animation: room-rush 1.8s cubic-bezier(0.6, 0, 0.9, 0.35) forwards;
+}
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgb(var(--accent-rgb) / 0.12) 0,
+      rgb(var(--accent-rgb) / 0.045) calc(var(--ring) * 1.1),
+      rgb(var(--accent-rgb) / 0) calc(var(--ring) * 2.8)
+    ),
+    radial-gradient(ellipse 55% 65% at 50% 50%, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0) 70%);
+}
+
+/* Smoke: two noise sheets drifting against each other, visible only where the
+   light reaches. */
+.smoke {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(
+    ellipse 60% 70% at 50% 50%,
+    #000 0%,
+    rgb(0 0 0 / 0.55) 40%,
+    rgb(0 0 0 / 0.12) 75%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 60% 70% at 50% 50%,
+    #000 0%,
+    rgb(0 0 0 / 0.55) 40%,
+    rgb(0 0 0 / 0.12) 75%,
+    transparent 100%
+  );
+}
+
+.smokeFar,
+.smokeNear {
+  position: absolute;
+  display: block;
+  will-change: transform;
+}
+
+.smokeFar {
+  top: -30%;
+  left: -30%;
+  width: 160%;
+  height: 160%;
+  opacity: 0.15;
+  animation: smoke-far 90s ease-in-out infinite alternate;
+}
+
+.smokeNear {
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  opacity: 0.09;
+  animation: smoke-near 60s ease-in-out infinite alternate;
+}
+
+/* Rays: an uneven fan from the aperture, brightest through the C's opening
+   (36°–144° clockwise from up), weak where the ring's body blocks the light. */
+.rays {
+  --w: 255 255 255;
+  --a: var(--accent-rgb);
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgb(var(--w) / 0) 0deg,
+    rgb(var(--w) / 0.02) 12deg,
+    rgb(var(--w) / 0) 15deg 41deg,
+    rgb(var(--w) / 0.05) 44deg,
+    rgb(var(--w) / 0) 47deg 55deg,
+    rgb(var(--a) / 0.085) 58deg,
+    rgb(var(--w) / 0) 61deg 69deg,
+    rgb(var(--w) / 0.04) 71deg,
+    rgb(var(--w) / 0) 73deg 82deg,
+    rgb(var(--w) / 0.1) 86deg,
+    rgb(var(--w) / 0) 90deg 97deg,
+    rgb(var(--a) / 0.05) 99deg,
+    rgb(var(--w) / 0) 101deg 111deg,
+    rgb(var(--w) / 0.075) 114deg,
+    rgb(var(--w) / 0) 117deg 127deg,
+    rgb(var(--a) / 0.04) 129deg,
+    rgb(var(--w) / 0) 131deg 165deg,
+    rgb(var(--w) / 0.03) 168deg,
+    rgb(var(--w) / 0) 171deg 190deg,
+    rgb(var(--w) / 0.025) 192deg,
+    rgb(var(--w) / 0) 194deg 234deg,
+    rgb(var(--w) / 0.018) 236deg,
+    rgb(var(--w) / 0) 238deg 279deg,
+    rgb(var(--w) / 0.02) 282deg,
+    rgb(var(--w) / 0) 285deg 316deg,
+    rgb(var(--w) / 0.015) 318deg,
+    rgb(var(--w) / 0) 320deg 360deg
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent calc(var(--ring) * 0.3),
+    #000 calc(var(--ring) * 0.55),
+    rgb(0 0 0 / 0.5) calc(var(--ring) * 1.6),
+    transparent calc(var(--ring) * 3.4)
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent calc(var(--ring) * 0.3),
+    #000 calc(var(--ring) * 0.55),
+    rgb(0 0 0 / 0.5) calc(var(--ring) * 1.6),
+    transparent calc(var(--ring) * 3.4)
+  );
+  transform-origin: 50% 50%;
+  animation:
+    rays-breathe 9s ease-in-out infinite alternate,
+    rays-sway 40s ease-in-out infinite alternate;
+  transition: opacity 0.6s ease;
+}
+
+/* Walls catching the light that leaks out to the right, as in the reference. */
+.wallUpper {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(38% 0, 62% 0, 100% 52%, 100% 88%);
+  background: linear-gradient(
+    205deg,
+    rgb(255 255 255 / 0.055) 0%,
+    rgb(255 255 255 / 0.018) 45%,
+    rgb(255 255 255 / 0) 80%
+  );
+}
+
+.wallLower {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(56% 100%, 100% 62%, 100% 100%);
+  background: linear-gradient(315deg, rgb(255 255 255 / 0.04), rgb(255 255 255 / 0) 65%);
+}
+
+/* The floor: a faint wet plane under the ring, a pool of light where it lands,
+   and the doorway's reflection running toward the viewer in ripples. */
+.floor {
+  position: absolute;
+  top: calc(50% + var(--ring) * 0.37);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.03), rgb(255 255 255 / 0) 45%);
+}
+
+.floor::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgb(255 255 255 / 0),
+    rgb(255 255 255 / 0.07) 50%,
+    rgb(255 255 255 / 0)
+  );
+}
+
+.wet {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.028) 0 1px,
+    rgb(255 255 255 / 0) 1px 6px
+  );
+  -webkit-mask-image: radial-gradient(ellipse 45% 70% at 50% 0%, #000, transparent 75%);
+  mask-image: radial-gradient(ellipse 45% 70% at 50% 0%, #000, transparent 75%);
+}
+
+.pool {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: calc(var(--ring) * 4);
+  height: calc(var(--ring) * 0.8);
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(closest-side, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 40%),
+    radial-gradient(
+      closest-side,
+      rgb(var(--accent-rgb) / 0.22),
+      rgb(var(--accent-rgb) / 0.07) 55%,
+      rgb(var(--accent-rgb) / 0)
+    );
+}
+
+.spill {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: calc(var(--ring) * 0.3);
+  height: calc(var(--ring) * 2.1);
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.46),
+    rgb(var(--accent-rgb) / 0.2) 42%,
+    rgb(var(--accent-rgb) / 0) 100%
+  );
+  filter: blur(1px);
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 28%, #000 72%, transparent),
+    repeating-linear-gradient(to bottom, #000 0 3px, rgb(0 0 0 / 0.3) 3px 7px);
+  mask-image:
+    linear-gradient(to right, transparent, #000 28%, #000 72%, transparent),
+    repeating-linear-gradient(to bottom, #000 0 3px, rgb(0 0 0 / 0.3) 3px 7px);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  animation: spill-ripple 3.2s linear infinite;
+}
+
+.motes {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 75% 75% at 50% 50%,
+    transparent 50%,
+    color-mix(in srgb, var(--ground) 70%, transparent) 100%
+  );
+}
+
+@keyframes scene-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes room-rush {
+  from {
+    transform: scale(1.03);
+  }
+  to {
+    transform: scale(3);
+  }
+}
+
+@keyframes smoke-far {
+  from {
+    transform: translate3d(-5%, 2%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(5%, -3%, 0) scale(1.08);
+  }
+}
+
+@keyframes smoke-near {
+  from {
+    transform: translate3d(4%, -2%, 0) scale(1.05);
+  }
+  to {
+    transform: translate3d(-6%, 3%, 0) scale(1);
+  }
+}
+
+@keyframes rays-breathe {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rays-sway {
+  from {
+    transform: rotate(-2deg);
+  }
+  to {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes spill-ripple {
+  from {
+    -webkit-mask-position:
+      0 0,
+      0 0;
+    mask-position:
+      0 0,
+      0 0;
+  }
+  to {
+    -webkit-mask-position:
+      0 0,
+      0 14px;
+    mask-position:
+      0 0,
+      0 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .smokeFar,
+  .smokeNear,
+  .rays,
+  .spill {
+    animation: none;
+  }
+
+  .room,
+  .scene[data-hover] .room,
+  .scene[data-leaving] .room {
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+}

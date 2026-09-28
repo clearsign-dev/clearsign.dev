@@ -1,0 +1,128 @@
+/* The reference's legal page: one centred 60rem column on the ground, no
+   chrome and no motion. Display sizes carry the 0.9 scale the tokens apply for
+   Plex Mono's wider set. */
+
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 6rem 1.2rem 8rem;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 400;
+  /* Legal copy reads at normal spacing, unlike the mono interface text. */
+  word-spacing: normal;
+}
+
+@media (max-width: 1024px) {
+  .page {
+    padding: 4.5rem 1.25rem 6rem;
+  }
+}
+
+.column {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 3rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--grey-300);
+  transition: color 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back:hover {
+    color: var(--ink);
+  }
+}
+
+.head {
+  margin-bottom: 3.5rem;
+}
+
+.title {
+  margin: 0 0 1rem;
+  font-size: clamp(1.8rem, 5.4vw, 3.15rem);
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.titleLine {
+  display: block;
+}
+
+.subtitle {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  color: var(--grey-300);
+}
+
+.updated {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--grey-100);
+}
+
+.section {
+  margin-bottom: 2.75rem;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1rem, 2.25vw, 1.45rem);
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.section p,
+.section li {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgb(255 255 255 / 0.78);
+}
+
+.section p {
+  margin: 0 0 1rem;
+}
+
+.section p:last-child {
+  margin-bottom: 0;
+}
+
+.section ul {
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.section li {
+  position: relative;
+  margin-bottom: 0.5rem;
+  padding-left: 1.4rem;
+  line-height: 1.6;
+}
+
+.section li:last-child {
+  margin-bottom: 0;
+}
+
+.section li::before {
+  content: "";
+  position: absolute;
+  top: 0.65em;
+  left: 0;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
