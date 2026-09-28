@@ -18,6 +18,8 @@
   --accent-deep: #2d6a8a;
   --accent-rgb: 74 163 201;
   --accent-deep-rgb: 45 106 138;
+  /* Text on the accent. White on #4aa3c9 is about 2.7:1, so it is dark. */
+  --on-accent: #06141b;
 
   /* Neutrals, kept from the reference: cool greys that already suit the blue */
   --heading-fill: rgb(210 215 225);

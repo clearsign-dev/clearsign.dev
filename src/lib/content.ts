@@ -15,6 +15,7 @@ export const RELEASES_URL = `${REPO_URL}/releases`;
 export const CONTACT_EMAIL = "hello@clearsign.dev";
 
 export const WARNING = {
+  label: "Before you download",
   headline: "Early development. Unaudited beyond one review. Not for real funds.",
   body: "Reviewing a transaction is safe on any computer. The signing and seed commands are locked behind an environment variable, because a recovery phrase typed into an everyday machine must be treated as exposed.",
 } as const;
@@ -27,6 +28,11 @@ export const PRELOADER = {
     button: "Start",
   },
   loadingLabel: "Loading",
+} as const;
+
+export const MENU = {
+  contact: "Tell us what it missed",
+  note: "The most useful thing anyone can send is a transaction this read badly.",
 } as const;
 
 export const HEADER = {
@@ -278,5 +284,8 @@ export const NOT_FOUND = {
   code: "404",
   title: "Nothing here decodes",
   body: "This address points at no page. The bytes are fine; the route is not.",
-  back: "Back to the start",
+  back: "Go home",
+  backNote: "Everything readable is there.",
+  tracker: ["Error", "Void"],
+  hint: "Still here? Try",
 } as const;
