@@ -1,0 +1,126 @@
+/* The stage: a fixed viewport over an invisible scroll track. */
+
+.wrapper {
+  position: fixed;
+  inset: 0;
+  background: var(--ground);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.track {
+  position: relative;
+  width: 100%;
+  pointer-events: none;
+}
+
+.sections {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  isolation: isolate;
+  transform: translateZ(0);
+  overflow: clip;
+}
+
+/* A dark vignette closes in around the contact panel. */
+.sections::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0) 35%,
+    rgba(0, 0, 0, 0.4) 52%,
+    rgba(0, 0, 0, 0.8) 68%,
+    rgba(0, 0, 0, 0.98) 100%
+  );
+}
+
+@media (max-width: 767px) {
+  .sections::before {
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) 48%,
+      rgba(0, 0, 0, 0.4) 64%,
+      rgba(0, 0, 0, 0.8) 80%,
+      rgba(0, 0, 0, 0.98) 100%
+    );
+  }
+}
+
+.sectionsContact::before {
+  opacity: 1;
+}
+
+.section {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  display: flex;
+  contain: layout style paint;
+  content-visibility: auto;
+  padding: var(--offset-x);
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .section {
+    padding: var(--offset-x-phone) var(--offset-x-phone) var(--offset-y-phone);
+    overflow: hidden;
+  }
+
+  .section:last-of-type {
+    padding-bottom: 0.6rem;
+  }
+}
+
+/* Neighbours are laid out and transparent, so they can fade in at once. */
+.nearby {
+  visibility: visible;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+  content-visibility: visible;
+}
+
+/* The section just left keeps its wrapper opaque while its own UI fades out. */
+.outgoing {
+  opacity: 1;
+  transition: none;
+  z-index: 3;
+}
+
+.active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+  content-visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nearby {
+    transition: none;
+  }
+}

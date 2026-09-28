@@ -1,4 +1,0 @@
-# cargo-fuzz needs nightly sanitizer support. The product itself stays on the pinned stable toolchain.
-[toolchain]
-channel = "nightly"
-profile = "minimal"

@@ -1,5 +1,0 @@
-# Pinned for reproducible builds (threat model INV-9). Change deliberately, never implicitly.
-[toolchain]
-channel = "1.98.1"
-components = ["rustfmt", "clippy"]
-profile = "minimal"

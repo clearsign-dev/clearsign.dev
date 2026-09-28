@@ -1,0 +1,22 @@
+/* Proportions from brand/clearsign-wordmark.svg: the mark is a 1024-unit square,
+   the name is set at 300 units and starts at x = 900, which is 124 units inside
+   the mark's own box (the mark has empty margin on its right). */
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.mark {
+  flex: none;
+}
+
+.name {
+  margin-left: calc(var(--wm-h) * -0.121);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--wm-name, calc(var(--wm-h) * 0.293));
+  letter-spacing: -0.0267em;
+  white-space: nowrap;
+}

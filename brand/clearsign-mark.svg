@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="ClearSign">
-  <path d="M 683.6 275.8 A 292 292 0 1 0 683.6 748.2" fill="none" stroke="var(--mark-c, #2d6a8a)" stroke-width="132" stroke-linecap="butt"/>
-  <path d="M 635.8 328.0 A 118 118 0 1 0 538.0 512.0 A 118 118 0 1 1 440.2 696.0" fill="none" stroke="var(--mark-gap, #0d1217)" stroke-width="134" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M 635.8 328.0 A 118 118 0 1 0 538.0 512.0 A 118 118 0 1 1 440.2 696.0" fill="none" stroke="var(--mark-s, #e8ecef)" stroke-width="104" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>

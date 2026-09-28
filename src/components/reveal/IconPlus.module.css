@@ -1,0 +1,50 @@
+.icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  color: var(--grey-100);
+  top: var(--top-desktop);
+  left: var(--left-desktop);
+  right: var(--right);
+  bottom: var(--bottom);
+  animation: scale-rotate 3.6s ease-in-out infinite;
+  opacity: 1;
+  transition:
+    opacity 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 767px) {
+  .icon {
+    top: var(--top-phone);
+    left: var(--left-phone);
+    width: 0.68rem;
+    height: 0.68rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktopHide {
+    display: none;
+  }
+}
+
+.hidden {
+  opacity: 0;
+  scale: 0.85;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon {
+    animation: none;
+  }
+}

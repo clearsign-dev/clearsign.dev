@@ -1,7 +1,0 @@
-# The signer binaries, as built in the canonical environment.
-# Reproduce with signing-core/scripts/reproducible-cross-check.sh.
-# Environment: debian:trixie@sha256:f324c7ff54321e8d9c588493a20244965938ce0aa50bbd1022d38010e9ffc4b1, Rust 1.98.1, target aarch64-unknown-linux-musl, offline.
-# Anything built elsewhere, including on the maintainer's own machine, may
-# differ: rustc does not promise identical output across compiler hosts.
-44ee5be40980a4cc8e88f8e097842235a00b6bd6c1fcb95c931bb4ca3cf34af6  clearsign
-79cfdce7b8a401facb7b60cabae5421751b41b06482c90bd5790ccf9ebf3d863  clearsign-device

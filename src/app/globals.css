@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+/* ClearSign tokens. The rebrand lives here and in layout.tsx (fonts); every
+   component reads these variables and never hardcodes a brand value.
+   See docs/research/BRAND.md for where each value came from. */
+
+:root {
+  color-scheme: dark;
+
+  /* Ground and ink */
+  --ground: #000;
+  --bg-primary: #20242d;
+  --ink: #e8ecef;
+  --dark: #121214;
+
+  /* Accent: ClearSign blue on dark, and its deep end for gradients */
+  --accent: #4aa3c9;
+  --accent-deep: #2d6a8a;
+  --accent-rgb: 74 163 201;
+  --accent-deep-rgb: 45 106 138;
+
+  /* Neutrals, kept from the reference: cool greys that already suit the blue */
+  --heading-fill: rgb(210 215 225);
+  --text: #8a909f;
+  --grey-100: #606372;
+  --grey-200: rgba(93, 95, 115, 0.4);
+  --grey-300: #a8aebc;
+  --grey-400: #29292e;
+  --grey-500: #a8aebc;
+  --grey-600: rgba(43, 44, 48, 0.6);
+  --grey-bg: #20242d;
+  --hairline: rgba(255, 255, 255, 0.2);
+
+  /* Severity colours: content only, for ClearSign's printed output */
+  --sev-critical: #e5484d;
+  --sev-blind: #d9a23a;
+  --sev-warning: #c9b24a;
+  --sev-info: #8a909f;
+
+  /* Type */
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+  --font-display: var(--font-plex-mono), ui-monospace, monospace;
+  --display-weight: 500;
+  --display-tracking: -0.02em;
+  /* Reference sizes scaled by ~0.9 for Plex Mono's wider set (BRAND.md). */
+  --h1-size: 180px;
+  --h2-size: 72px;
+  --h2-large-size: 92px;
+  --word-spacing-mono: -0.35em;
+  --text-base: 1.0625rem;
+
+  /* Layout */
+  --offset-x: 1.2rem;
+  --offset-x-phone: 0.625rem;
+  --offset-y-phone: 5rem;
+  --offset-content: 50%;
+  --offset-content-top: 4.6rem;
+  --container-maxwidth: 1500px;
+  --clip-corner: polygon(0 0, 100% 0, 100% calc(100% - 1rem), calc(100% - 1rem) 100%, 0 100%);
+
+  /* Motion */
+  --motion-ease-reveal: cubic-bezier(0.19, 1, 0.22, 1);
+  --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-duration-fast: 0.35s;
+  --motion-duration-base: 0.5s;
+  --motion-duration-reveal: 0.75s;
+}
+
+@media (max-width: 1024px), (hover: none), (pointer: coarse) {
+  :root {
+    --motion-duration-fast: 0.44s;
+    --motion-duration-base: 0.62s;
+    --motion-duration-reveal: 0.95s;
+    --motion-ease-standard: cubic-bezier(0.26, 1, 0.34, 1);
+  }
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-ink: var(--ink);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-text: var(--text);
+  --color-grey-100: var(--grey-100);
+  --color-grey-300: var(--grey-300);
+  --color-grey-400: var(--grey-400);
+  --color-dark: var(--dark);
+  --color-sev-critical: var(--sev-critical);
+  --color-sev-blind: var(--sev-blind);
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --breakpoint-desktop: 1024px;
+}
+
+html,
+body {
+  overscroll-behavior: none;
+  background-color: var(--bg-primary);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  line-height: 120%;
+  word-spacing: var(--word-spacing-mono);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  text-transform: uppercase;
+  word-spacing: normal;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--grey-100);
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover {
+    color: #fff;
+  }
+}
+
+/* Anything the visitor might want to copy stays selectable. */
+input,
+textarea,
+code,
+pre,
+.selectable {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Body paragraphs are set in Plex Sans at normal word spacing. The mono
+   interface text around them keeps the reference's tight -0.35em. */
+.section-reveal-paragraph {
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  line-height: var(--text-lg--line-height);
+  max-width: 46ch;
+  text-wrap: pretty;
+  word-spacing: normal;
+}
+
+@media (max-width: 1435px) {
+  .section-reveal-paragraph {
+    font-size: 15px;
+    line-height: var(--text-base--line-height);
+  }
+}
+
+@media (min-width: 2245px) {
+  .section-reveal-paragraph {
+    font-size: var(--text-3xl);
+    line-height: var(--text-3xl--line-height);
+  }
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.char,
+.word {
+  display: inline-block;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+@media (min-width: 1024px) {
+  .desktop-hide {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@keyframes scale-rotate {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  80% {
+    transform: scale(1) rotate(0deg);
+  }
+  90% {
+    transform: scale(0.8) rotate(45deg);
+  }
+  100% {
+    transform: scale(1) rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

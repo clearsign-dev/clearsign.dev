@@ -1,8 +1,0 @@
-# Seeds for failure cases proptest has generated in the past. It is
-# automatically read and these particular cases re-run before any
-# novel cases are generated.
-#
-# It is recommended to check this file in to source control so that
-# everyone who runs the test benefits from these saved cases.
-cc b016f73791f16ab838f136cdfa809682e62bfd1f98227d46e006a8df67a7bf76 # shrinks to chain_id = 0, safe = 0x0000000000000000000000000000000000000000, to = 0x0000000000000000000000000000000000000000, value = 0, data = [], operation = 0, safe_tx_gas = 0, base_gas = 115792089237316195423570985008687907853269984665640564039457584007913129639935, gas_price = 0, gas_token = 0x0000000000000000000000000000000000000000, refund = 0x0000000000000000000000000000000000000000, nonce = 0
-cc a0affcf80000cddbcd9bacf0684bf1a1ff8358996b72424b5b5c809c4d9bf774 # shrinks to signatures = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], inner = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], mutations = [(3225806641361738252, 0)], truncate = None, extend = [0]
