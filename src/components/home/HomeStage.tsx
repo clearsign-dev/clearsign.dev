@@ -65,7 +65,6 @@ export function HomeStage() {
       <Stage sections={SECTION_COMPONENTS}>
         <Scene />
         <CircleBackground />
-        <Header />
         <ScrollIndicator />
         <Scrollbar />
         {/* Desktop: both place themselves. ≤1024px: this dock lines them up at the bottom. */}
@@ -74,6 +73,9 @@ export function HomeStage() {
           <AudioVisualiser mobileHidden={contactActive} />
         </div>
       </Stage>
+      {/* Outside the stage: its wrapper is position: fixed, which makes it a
+          stacking context, and the logo has to sit above the phone menu. */}
+      <Header />
       <Menu />
       <SmokeTransitionLayer />
       {/* Outside the stage so these sit above every layer; the cursor inverts what it covers. */}

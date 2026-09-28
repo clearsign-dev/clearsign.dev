@@ -28,6 +28,9 @@ export const MARK_EXTENT = MARK.cRadius + MARK.cStroke / 2;
 /** x of the middle of the mark's visual bounds (the C's back to its terminals), mark units. */
 export const MARK_VISUAL_CX = (MARK_EXTENT * Math.cos(MARK.gapDeg * DEG) - MARK_EXTENT) / 2;
 
+/** The mark's visual width, mark units. */
+export const MARK_VISUAL_WIDTH = MARK_EXTENT * (1 + Math.cos(MARK.gapDeg * DEG));
+
 /** Intro timeline, seconds from `introStarted`. */
 export const INTRO = {
   dotIn: 0.35,

@@ -4,18 +4,17 @@ Reference: `lib/components/Preloader/BackgroundPattern.svelte`,
 `backgroundPattern/engine.ts`, `backgroundPattern/worker.ts`.
 
 Files: `src/components/chrome/Preloader/PatternCanvas.tsx` (host),
-`pattern/engine.ts` (renderer, DOM-free), `pattern/pattern.worker.ts`,
-`pattern/protocol.ts`, `pattern/tokens.ts`.
+`pattern/engine.ts` (renderer, DOM-free), `pattern/protocol.ts` (shared types),
+`pattern/tokens.ts`.
 
 ## Host
 
 - One full-screen `<canvas>` (z 0, no pointer events) on the ground colour.
-- Prefers a module Web Worker with an `OffscreenCanvas`, so the 3D scene's
-  warm-up cannot starve it. Falls back to the same engine on the main thread
-  when `transferControlToOffscreen`/`Worker` are missing, when the worker errors,
-  has no 2D context, or has not said it is alive within 1.5s (the canvas is
-  remounted, since a transferred canvas cannot be reused; progress resumes where
-  it was). A failed hand-over (a development remount) retries on a fresh canvas.
+- Runs on the main thread. The reference draws its grid in a Web Worker so the
+  3D scene's warm-up cannot stall it; a worker was built here too, but
+  Turbopack's static export copies a worker's TypeScript source to `out/`
+  instead of compiling it, so it could never have run in production. The
+  scene's shader compile is short, and the counter resumes where it was.
 - DPR capped at 2. ResizeObserver → resize. `pointermove` → pointer (not under
   reduced motion). `visibilitychange` pauses the loop.
 - Colours are read once from `:root` (`--accent-rgb`, `--ink`, `--ground`) and

@@ -145,6 +145,20 @@ export const MOBILE_LOOKS: readonly Look[] = [
   look({ fit: 2.3, my: 0.3, mz: -7, breathe: 0.6, bright: 0.45, glow: 0.25, disturb: 0.4, shimmer: 0.8, ca: 0.8, parallax: 0.6 }),
 ];
 
+// ≤ 1024px held landscape (a tablet on its side): the portrait hero would fill
+// the whole screen, so the hero frames like desktop — centred, sized from the
+// height. Every other section keeps the mobile framing, which already suits it.
+export const MOBILE_LANDSCAPE_LOOKS: readonly Look[] = [DESKTOP_LOOKS[0], ...MOBILE_LOOKS.slice(1)];
+
+/** How far a ≤ 1024px viewport leans to its landscape table (0 portrait, 1 landscape). */
+export function landscapeBlend(aspect: number): number {
+  const t = Math.max(0, Math.min(1, (aspect - 0.95) / (1.2 - 0.95)));
+  return t * t * (3 - 2 * t);
+}
+
+/** On landscape viewports the mark never spans more than this share of the width. */
+export const MARK_MAX_WIDTH_SHARE = 0.6;
+
 /** Formation layout: where the screen-anchored formations sit. */
 export type FormLayout = {
   /** Vertical field of view, degrees, for landscape and portrait viewports. */
@@ -252,6 +266,11 @@ const smootherstep = (x: number) => {
 
 export function copyLook(from: Look, out: Look): Look {
   for (const k of LOOK_KEYS) out[k] = from[k];
+  return out;
+}
+
+export function mixLook(a: Look, b: Look, t: number, out: Look): Look {
+  for (const key of LOOK_KEYS) out[key] = a[key] + (b[key] - a[key]) * t;
   return out;
 }
 

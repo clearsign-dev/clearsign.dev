@@ -14,10 +14,14 @@ import { readLayoutFlags, type LayoutFlags } from "@/lib/stage/useLayoutFlags";
 import {
   DESKTOP_LAYOUT,
   DESKTOP_LOOKS,
+  MARK_MAX_WIDTH_SHARE,
+  MOBILE_LANDSCAPE_LOOKS,
   MOBILE_LAYOUT,
   MOBILE_LOOKS,
   PROOF_STEP,
   createLook,
+  landscapeBlend,
+  mixLook,
   evaluateFill,
   evaluateForm,
   evaluateLook,
@@ -26,7 +30,7 @@ import {
   markWeight,
   type FormBlend,
 } from "./choreography";
-import { INTRO, MARK, MARK_EXTENT, MARK_VISUAL_CX, buildSceneGeometry } from "./geometry";
+import { INTRO, MARK, MARK_EXTENT, MARK_VISUAL_CX, MARK_VISUAL_WIDTH, buildSceneGeometry } from "./geometry";
 import { PointerField } from "./pointerField";
 import {
   CLEAR_HIGH,
@@ -303,6 +307,7 @@ export async function createSceneEngine(
   let pointerSpeed = 0;
   let caMotion = 0;
   const look = createLook();
+  const landscapeLook = createLook();
   const form: FormBlend = { from: 0, to: 0, t: 0 };
   const pointer = { nx: 0, ny: 0, u: 0.5, v: 0.5, t: 0, seen: false };
   const parallax = new THREE.Vector2();
@@ -328,14 +333,18 @@ export async function createSceneEngine(
     const mobile = flags.isMobile;
     const table = mobile ? MOBILE_LOOKS : DESKTOP_LOOKS;
     const layout = mobile ? MOBILE_LAYOUT : DESKTOP_LAYOUT;
+    // ≤ 1024px on its side (a landscape tablet) leans to its landscape table.
+    const lean = mobile ? landscapeBlend(width / height) : 0;
     let fillIn = 0;
     let fillOut = 0;
     if (reduced) {
       lookForStep(stage.step, table, look);
+      if (lean > 0) mixLook(look, lookForStep(stage.step, MOBILE_LANDSCAPE_LOOKS, landscapeLook), lean, look);
       formForStep(stage.step, form);
       fillIn = stage.step === PROOF_STEP ? 1 : 0;
     } else {
       evaluateLook(stageP, table, look);
+      if (lean > 0) mixLook(look, evaluateLook(stageP, MOBILE_LANDSCAPE_LOOKS, landscapeLook), lean, look);
       evaluateForm(stageP, form);
       [fillIn, fillOut] = evaluateFill(stageP);
     }
@@ -374,7 +383,10 @@ export async function createSceneEngine(
       breathe * 0.02 * Math.sin(elapsed * 0.13),
     );
     markQuat.setFromEuler(euler);
-    const s = look.scale * (1 + breathe * 0.012 * Math.sin(elapsed * 0.5));
+    // Landscape viewports: never wider than MARK_MAX_WIDTH_SHARE of the width.
+    const widthCap =
+      aspect >= 1 ? (MARK_MAX_WIDTH_SHARE * 2 * tanH * aspect * markDist) / MARK_VISUAL_WIDTH : Infinity;
+    const s = Math.min(look.scale, widthCap) * (1 + breathe * 0.012 * Math.sin(elapsed * 0.5));
     markScale.set(s, s, s);
     // `centre` moves the mark's visual middle (not the C's centre) onto markPos,
     // and it breathes about that middle.

@@ -83,7 +83,9 @@ CA, vignette, grid, parallax): 0.72–1.55, 1.8–2.3, 2.86–3.3, 3.84–4.14, 
 shorter side, so the mark spans ~80% of a phone's width in the hero. The subject moves
 up behind the text (problem y 0.45, getIt y 0.1), reads lattices sit in the upper half
 at ±0.5 (the hotspots are hidden there and cards take the bottom), the clear zone covers
-the full-width slider, ship clusters are smaller.
+the full-width slider, ship clusters are smaller. Held landscape (a tablet on its side, aspect
+blend 0.95–1.2) the hero leans to the desktop hero (centred, 69% of the height); on any
+landscape viewport the mark is capped at 60% of the width.
 
 **Intro** (on `introStarted`, 3.0 s, dt capped at 1/30 s as the reference does): a bright
 dot grows at the mark centre (0–0.35 s); C rods fly out from it, swirling 1.3 rad into
