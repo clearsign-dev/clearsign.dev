@@ -1,0 +1,86 @@
+/* The right half on desktop; full width, inset, below it. Unpositioned, so
+   the plus marker resolves against the stage section, as on the reference. */
+
+.problem {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-width: 0;
+  height: 100%;
+  padding-top: 2.3rem;
+}
+
+@media (min-width: 1024px) {
+  .problem {
+    margin-left: var(--offset-content);
+  }
+}
+
+@media (min-width: 767px) and (max-width: 1024px) {
+  .problem {
+    padding-top: 5.7rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .problem {
+    padding-top: 3.3rem;
+  }
+}
+
+/* The title measures its own column, so the heading can be capped to fit it
+   whatever the insets add up to (at exactly 1024px the reference applies both
+   the desktop offset and the tablet inset). */
+.title {
+  container-type: inline-size;
+  /* Plex Mono advances 0.6em per glyph; the heading's -4px margin gives a
+     little back. */
+  --problem-fit: calc((100cqi + 4px) / (var(--problem-longest-line, 12) * 0.6));
+}
+
+@media (min-width: 767px) and (max-width: 1024px) {
+  .title {
+    margin-left: 3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .title {
+    margin-top: 1rem;
+    margin-left: 1.68rem;
+  }
+}
+
+/* Above 550px the Heading's default size, capped; at 550px and below its own
+   clamp applies unchanged. */
+@media (min-width: 551px) {
+  .title .heading {
+    font-size: min(var(--h2-size), var(--problem-fit));
+  }
+}
+
+/* "H2 Large": the shared oversized title, in the right half. */
+@media (min-width: 1024px) {
+  .title .heading {
+    font-size: min(var(--h2-large-size), var(--problem-fit));
+  }
+}
+
+.copy {
+  margin-top: auto;
+  color: var(--text);
+}
+
+.copy p {
+  margin: 0;
+}
+
+.copy p + p {
+  padding-top: 1.5rem;
+}
+
+@media (max-width: 1435px) {
+  .copy p + p {
+    padding-top: 1rem;
+  }
+}

@@ -3,6 +3,8 @@
 import type { ComponentType } from "react";
 import { IntroController } from "@/components/stage/IntroController";
 import { Stage, type SectionProps } from "@/components/stage/Stage";
+import { Hero } from "@/components/sections/Hero";
+import { Problem } from "@/components/sections/Problem";
 import { SECTIONS } from "@/lib/stage/sections";
 
 // Placeholder bodies until each section's builder lands. Each is replaced by
@@ -19,8 +21,10 @@ function placeholder(label: string): ComponentType<SectionProps> {
   return Placeholder;
 }
 
-const SECTION_COMPONENTS: ComponentType<SectionProps>[] = SECTIONS.map((s) =>
-  placeholder(s.indicatorLabel),
+const BUILT: Partial<Record<string, ComponentType<SectionProps>>> = { hero: Hero, problem: Problem };
+
+const SECTION_COMPONENTS: ComponentType<SectionProps>[] = SECTIONS.map(
+  (s) => BUILT[s.id] ?? placeholder(s.indicatorLabel),
 );
 
 export function HomeStage() {

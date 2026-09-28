@@ -1,0 +1,265 @@
+/* The opening screen. Nothing in here is positioned except the meta row, so
+   the plus markers resolve against the stage section, as on the reference. */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    justify-content: space-between;
+    padding-top: 15rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    padding-top: 12.5rem;
+  }
+}
+
+/* Meta row */
+
+.meta {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  /* Declared here, not inherited, so the em follows each font step. */
+  word-spacing: var(--word-spacing-mono);
+}
+
+@media (min-width: 768px) {
+  .meta {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+@media (min-width: 1181px) {
+  .meta {
+    font-size: 1.125rem;
+    line-height: calc(1.75 / 1.125);
+  }
+}
+
+@media (min-width: 2245px) {
+  .meta {
+    font-size: 1.5rem;
+    line-height: calc(2 / 1.5);
+  }
+}
+
+@media (max-width: 1024px) {
+  .meta {
+    height: 100%;
+  }
+}
+
+.group {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.leading {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .group {
+    width: 35%;
+  }
+
+  .leading {
+    display: flex;
+  }
+}
+
+.item {
+  margin: 0;
+  max-width: 27ch;
+}
+
+.clock {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.time {
+  font-weight: 500;
+}
+
+/* Grows from the centre: the transform is set inline (scrub) or by the intro. */
+.rule {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  height: 1px;
+  background: var(--hairline);
+  transform: translate3d(-50%, 0, 0) scaleX(0);
+  transform-origin: center;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* Headline. The reference's size steps scaled for Plex Mono against --h1-size,
+   each capped so the longest line always fits the row: Plex Mono advances
+   0.6em per glyph. */
+
+.hero .headline {
+  --hero-gutter: var(--offset-x);
+  --hero-fit: calc((100vw - 2 * var(--hero-gutter)) / (var(--hero-longest-line, 13) * 0.6));
+  margin: 0;
+  font-size: min(var(--h1-size), var(--hero-fit));
+  line-height: 90%;
+}
+
+@media (max-width: 1600px) {
+  .hero .headline {
+    font-size: min(calc(var(--h1-size) * 0.89), var(--hero-fit));
+  }
+}
+
+@media (max-width: 1450px) {
+  .hero .headline {
+    font-size: min(calc(var(--h1-size) * 0.77), var(--hero-fit));
+  }
+}
+
+@media (max-width: 1240px) {
+  .hero .headline {
+    font-size: min(calc(var(--h1-size) * 0.64), var(--hero-fit));
+  }
+}
+
+@media (max-width: 1055px) {
+  .hero .headline {
+    font-size: min(calc(var(--h1-size) * 0.48), var(--hero-fit));
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero .headline {
+    --hero-gutter: var(--offset-x-phone);
+  }
+}
+
+@media (max-width: 700px) {
+  .hero .headline {
+    font-size: min(calc(var(--h1-size) * 0.36), var(--hero-fit));
+  }
+}
+
+@media (max-width: 530px) {
+  .hero .headline {
+    font-size: min(calc(var(--h1-size) * 0.24), var(--hero-fit));
+  }
+}
+
+.line {
+  position: relative;
+  line-height: 90%;
+}
+
+.line:first-child {
+  margin-left: -5px;
+}
+
+.line:not(:first-child) {
+  margin-left: auto;
+  margin-right: -5px;
+}
+
+/* Plus markers: the reference's per-breakpoint positions. !important beats
+   the inline custom properties IconPlus sets from its props. */
+
+@media (max-width: 1600px) {
+  .iconRight {
+    --top-desktop: 48% !important;
+  }
+}
+
+@media (max-width: 1450px) {
+  .iconRight {
+    --top-desktop: 55% !important;
+  }
+
+  .iconLeft {
+    --top-desktop: 70% !important;
+  }
+}
+
+@media (max-width: 1240px) {
+  .iconRight {
+    --top-desktop: 62% !important;
+  }
+
+  .iconLeft {
+    --top-desktop: 75% !important;
+  }
+}
+
+@media (max-width: 1055px) {
+  .iconRight {
+    --top-desktop: 70% !important;
+  }
+
+  .iconLeft {
+    --top-desktop: 83% !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .iconRight {
+    --top-desktop: 65% !important;
+    --right: 10px !important;
+  }
+
+  .iconLeft {
+    --top-desktop: 77% !important;
+    --left-desktop: 10px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .iconRight {
+    --top-phone: 65% !important;
+  }
+
+  .iconLeft {
+    --top-phone: 77% !important;
+    --left-phone: 10px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .iconRight {
+    --top-phone: 72% !important;
+  }
+
+  .iconLeft {
+    --top-phone: 80% !important;
+  }
+}
+
+@media (max-width: 530px) {
+  .iconRight {
+    --top-phone: 72% !important;
+  }
+
+  .iconLeft {
+    --top-phone: 85% !important;
+  }
+}

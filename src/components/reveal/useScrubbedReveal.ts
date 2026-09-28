@@ -88,7 +88,12 @@ export function useScrubbedReveal(
     totalMsRef.current = maxDelay + durationMs;
     appliedRef.current = -1;
     firedBeforeEndRef.current = false;
-    // First apply is synchronous: no flash of the wrong state on mount.
+    // First apply is synchronous and uses the current scroll progress, so a
+    // section mounted mid-scroll paints its real state on its first frame.
+    const { progress: initial, progressPower = 1 } = optionsRef.current;
+    if (typeof initial === "number" && Number.isFinite(initial)) {
+      targetRef.current = Math.max(0, Math.min(1, initial)) ** progressPower;
+    }
     apply(targetRef.current);
     return () => {
       cancelAnimationFrame(rafRef.current);

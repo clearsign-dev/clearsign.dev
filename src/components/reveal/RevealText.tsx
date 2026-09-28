@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState, type ElementType } from "react";
 import { EASE, isMobileMotionContext, powerOut, prefersReducedMotion, scaleDuration } from "@/lib/motion/easings";
-import { SplitText, type Segment } from "./SplitText";
+import { SplitText, segmentsText, type Segment } from "./SplitText";
 import { useScrubbedReveal } from "./useScrubbedReveal";
 
 // Body-copy reveal. On desktop each character fades up out of a slight blur;
@@ -133,14 +133,19 @@ export function RevealText({
     rebuildKey: `${mode}:${duration}:${stagger}:${y}:${JSON.stringify(segments)}`,
   });
 
+  // Screen readers get the sentence once; the split glyphs are hidden from
+  // them, or they would be read out letter by letter.
   return (
     <Tag ref={ref} className={className}>
+      <span className="sr-only">{segmentsText(segments)}</span>
       {mode === "block" ? (
-        <span className="reveal-block" style={{ display: "inline-block" }}>
+        <span className="reveal-block" style={{ display: "inline-block" }} aria-hidden="true">
           <SplitText segments={segments} />
         </span>
       ) : (
-        <SplitText segments={segments} />
+        <span aria-hidden="true">
+          <SplitText segments={segments} />
+        </span>
       )}
     </Tag>
   );
