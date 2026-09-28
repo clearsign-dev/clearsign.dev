@@ -13,7 +13,7 @@ import {
   stageForStep,
   type Axes,
 } from "./progression";
-import { computeLayout, drawScene, laneFromPoint, laneWidthAt, laneXAt, padSize, yAt, type Layout } from "./render";
+import { computeLayout, drawScene, laneFromPoint, laneWidthAt, laneXAt, padSize, type Layout } from "./render";
 import { readBest, readSettings, saveBest, type Best } from "./storage";
 import {
   beatSeconds,
@@ -998,7 +998,7 @@ export class VoidHeroGame {
       S.shakeX = 0;
       S.shakeY = 0;
     }
-    S.showSignLabel = yAt(L, 0) > 0;
+    S.showSignLabel = this.mode !== "ended";
     drawScene(this.g, L, this.palette, S);
   }
 

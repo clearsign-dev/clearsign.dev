@@ -25,6 +25,9 @@ export const MARK = {
 /** Outer radius of the mark, for framing. */
 export const MARK_EXTENT = MARK.cRadius + MARK.cStroke / 2;
 
+/** x of the middle of the mark's visual bounds (the C's back to its terminals), mark units. */
+export const MARK_VISUAL_CX = (MARK_EXTENT * Math.cos(MARK.gapDeg * DEG) - MARK_EXTENT) / 2;
+
 /** Intro timeline, seconds from `introStarted`. */
 export const INTRO = {
   dotIn: 0.35,

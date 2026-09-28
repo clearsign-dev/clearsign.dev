@@ -62,10 +62,10 @@ After Chain, every 256 steps is "Chain II, III…": axes ease toward 1.85 / 0.62
 Each track's steps are data (drums, bass, lead, pad per 16th). The chart is derived once per track from the loop section:
 
 - Salience per step = metric weight (bar 0.35, half 0.25, beat 0.18, 8th 0.08) + kick 0.28 + snare/clap 0.24 + lead 0.26 + bass 0.12, × velocity, plus a tiny deterministic jitter. Hats alone make no note.
-- Lane = lead pitch band across the track's lead range (else bass band, else kick left / snare right).
-- Hold = lead note ≥ 4 steps or bass note ≥ 6 steps, if ≥ 0.45 s.
-- Chord partner on beats where a drum hit meets a lead note, lane on the far side.
-- Density gate: salience threshold that admits `density × 110` notes per minute of the loop (the reference's rate). Chord partners must also pass it and need chords unlocked.
+- Hold = lead note ≥ 4 steps or bass note ≥ 6 steps, if ≥ 0.45 s; starts at least 6 beats apart; from Byte on.
+- Density gate: salience threshold that admits `density × 110` notes per minute of the loop (the reference's rate).
+- Chords: on beats where a drum hit meets a lead note, a partner byte two lanes away, only for bytes inside the strongest 25% (a second gate at `density × 0.25`) and once chords unlock.
+- Lanes follow the melodic contour of the bytes that actually spawn: up moves right, down moves left, a leap (≥ 9 semitones) moves two, a repeated pitch steps aside, edges bounce; drum-only bytes sit left (kick) or right (snare). Pitch bands put every downbeat in one lane, so they were dropped.
 - Lane conflicts: a lane is busy until its last note (or hold end) + max(0.16 s, 1.5 steps); the note moves to the nearest free lane or is dropped.
 - Two intro bars never carry notes; switching track mid-run starts the new track at its loop, drops bytes in flight without penalty and keeps the stage.
 

@@ -114,6 +114,7 @@
   font-size: calc(1.125rem * 0.9);
   letter-spacing: var(--display-tracking);
   word-spacing: normal;
+  --word-spacing: normal;
   text-transform: uppercase;
   text-decoration: none;
   transition:
@@ -318,6 +319,7 @@
   font-weight: 500;
   line-height: 120%;
   word-spacing: normal;
+  --word-spacing: normal;
 }
 
 /* ---- Social tiles ---------------------------------------------------------- */

@@ -60,6 +60,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   word-spacing: normal;
+  --word-spacing: normal;
 }
 
 @media (prefers-reduced-motion: reduce) {

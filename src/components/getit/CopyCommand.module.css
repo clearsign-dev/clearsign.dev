@@ -21,6 +21,7 @@
   font-size: 0.8125rem;
   line-height: 1.4;
   word-spacing: normal;
+  --word-spacing: normal;
   color: var(--ink);
   /* A command never wraps: a break after "--" would change what it looks like. */
   white-space: pre;

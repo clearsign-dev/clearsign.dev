@@ -134,6 +134,7 @@
   letter-spacing: var(--display-tracking);
   text-transform: uppercase;
   word-spacing: normal;
+  --word-spacing: normal;
   font-size: 1.35rem;
   line-height: 1.333;
   color: color-mix(in srgb, var(--grey-400) 60%, var(--grey-100));

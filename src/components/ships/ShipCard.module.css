@@ -217,6 +217,7 @@
   font-size: 0.9375rem;
   line-height: 1.4;
   word-spacing: normal;
+  --word-spacing: normal;
   color: var(--grey-300);
   text-wrap: pretty;
   backface-visibility: hidden;

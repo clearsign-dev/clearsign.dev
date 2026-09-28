@@ -20,6 +20,7 @@
   color: var(--grey-300);
   line-height: 150%;
   word-spacing: normal;
+  --word-spacing: normal;
   translate: -50% -50%;
   scale: 0.72;
   opacity: 0;

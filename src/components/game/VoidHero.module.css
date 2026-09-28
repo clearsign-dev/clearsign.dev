@@ -4,6 +4,8 @@
 /* ------------------------------------------------------------------ frame */
 
 .root {
+  /* Game text is small; the interface's tight word spacing would close its gaps. */
+  --word-spacing: normal;
   position: fixed;
   inset: 0;
   z-index: 200;
@@ -50,6 +52,7 @@
   letter-spacing: var(--display-tracking);
   white-space: nowrap;
   word-spacing: normal;
+  --word-spacing: normal;
   font-variant-numeric: tabular-nums;
   color: color-mix(in srgb, var(--grey-400) 60%, transparent);
   -webkit-text-stroke: 1px var(--hairline);
@@ -158,6 +161,7 @@
   align-items: center;
   gap: 0.45rem;
   word-spacing: normal;
+  --word-spacing: normal;
 }
 
 .hudMark {
@@ -533,6 +537,7 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
   word-spacing: normal;
+  --word-spacing: normal;
   transition:
     background 0.18s ease,
     border-color 0.18s ease,
@@ -740,6 +745,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   word-spacing: normal;
+  --word-spacing: normal;
   transform: rotate(-3deg);
   animation: stampIn 0.35s cubic-bezier(0.2, 1.6, 0.4, 1) both;
 }
@@ -818,6 +824,7 @@
   text-transform: uppercase;
   white-space: nowrap;
   word-spacing: normal;
+  --word-spacing: normal;
   color: var(--ink);
   text-shadow: 0 0 0.6rem color-mix(in srgb, var(--ink) 40%, transparent);
   will-change: transform, opacity;

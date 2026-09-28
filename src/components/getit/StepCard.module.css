@@ -83,6 +83,7 @@
   font-weight: 400;
   line-height: 1.35;
   word-spacing: normal;
+  --word-spacing: normal;
   color: var(--grey-300);
   opacity: var(--body-opacity);
   text-wrap: pretty;

@@ -220,6 +220,7 @@
   color: #fff;
   text-align: left;
   word-spacing: normal;
+  --word-spacing: normal;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;

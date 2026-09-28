@@ -12,6 +12,7 @@
   font-weight: 400;
   /* Legal copy reads at normal spacing, unlike the mono interface text. */
   word-spacing: normal;
+  --word-spacing: normal;
 }
 
 @media (max-width: 1024px) {

@@ -2,7 +2,7 @@
 // which compiles it as GLSL ES 3.00 on WebGL2 (so int uniforms, dynamic array
 // indexing and texture reads in the vertex stage are all available).
 
-import { MARK } from "./geometry";
+import { MARK, MARK_VISUAL_CX } from "./geometry";
 import { FIELD_RANGE } from "./pointerField";
 
 const f = (n: number) => (Number.isInteger(n) ? `${n}.0` : `${n}`);
@@ -19,6 +19,7 @@ const SHARED = /* glsl */ `
 export const pointsVertex = /* glsl */ `
 ${SHARED}
 #define S_CENTRE vec2(${f(MARK.sShift)}, 0.0)
+#define INTRO_ORIGIN vec2(${f(MARK_VISUAL_CX)}, 0.0)
 
 attribute vec4 aInfo;   // part (0 C, 1 S), intro delay, rand, rand
 attribute vec4 aReads;  // side, lattice offset xyz
@@ -41,11 +42,13 @@ uniform vec3 uFrustum;      // tan(fov/2) * aspect, tan(fov/2), camera z
 uniform vec3 uReadsL;
 uniform vec3 uReadsR;
 uniform float uReadsScale;
+uniform vec4 uReadsClear;   // dim disc: centre xy, radius, feather (lattice units)
 uniform float uBandY;
 uniform vec4 uField;        // speed, z near, z far, share shown
 uniform vec4 uFieldClear;   // ndc rectangle kept clear
 uniform vec4 uShips[4];     // centre xyz, scale
 uniform float uBright;
+uniform float uSLevel;
 uniform float uGlow;
 uniform float uShimmer;
 uniform float uSize;
@@ -77,8 +80,9 @@ vec3 markPos(out float vis) {
   // Intro: out of the centre dot, swirling into place along the drawing direction.
   float it = clamp((uIntroTime - aInfo.y) / uIntroFlight, 0.0, 1.0);
   float e = 1.0 - pow(1.0 - it, 3.0);
-  vec3 q = p * e;
-  q.xy = rot2(q.xy, -(1.0 - e) * 1.3);
+  vec3 origin = vec3(INTRO_ORIGIN, 0.0);
+  vec3 q = origin + (p - origin) * e;
+  q.xy = INTRO_ORIGIN + rot2(q.xy - INTRO_ORIGIN, -(1.0 - e) * 1.3);
   q.z -= (1.0 - e) * 0.5;
   vis = smoothstep(0.0, 0.35, it);
   return (uMark * vec4(q, 1.0)).xyz;
@@ -89,7 +93,11 @@ vec3 readsPos(out float vis) {
   // A scan line walks down the rows, the way a reader goes down a dump.
   float scanY = 0.75 - fract(uTime * 0.09 + (aReads.x < 0.0 ? 0.0 : 0.5)) * 1.5;
   float scan = exp(-pow((aReads.z - scanY) * 9.0, 2.0)) * uMotion;
-  vis = aVis.x * (1.0 + 1.1 * scan) * uIntroGlobal;
+  // Keep the hotspot's eye and label legible: dim a soft disc behind them.
+  float clearK = uReadsClear.z > 0.0
+    ? smoothstep(uReadsClear.z - uReadsClear.w, uReadsClear.z, length(aReads.yz - uReadsClear.xy))
+    : 1.0;
+  vis = aVis.x * (1.0 + 1.1 * scan) * mix(0.3, 1.0, clearK) * uIntroGlobal;
   return centre + aReads.yzw * uReadsScale;
 }
 
@@ -171,6 +179,8 @@ void main() {
   float twinkle = sin(uTime * (0.55 + aInfo.w * 0.8) + aInfo.w * 40.0);
   float wave = sin(dot(world.xy, vec2(1.7, 1.1)) - uTime * 0.8);
   float b = uBright * (1.0 + shimmer * (0.22 * twinkle + 0.12 * wave));
+  // The S tube packs more points per pixel than the rods: hold it to the C's level.
+  b *= mix(1.0, uSLevel, aInfo.x * markW);
 
   // getIt: brighter from within, leaning toward the accent near the core.
   float inner = 1.0 - smoothstep(0.15, 1.05, length(position.xy - S_CENTRE));

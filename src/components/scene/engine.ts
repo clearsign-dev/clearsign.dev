@@ -26,7 +26,7 @@ import {
   markWeight,
   type FormBlend,
 } from "./choreography";
-import { INTRO, MARK, MARK_EXTENT, buildSceneGeometry } from "./geometry";
+import { INTRO, MARK, MARK_EXTENT, MARK_VISUAL_CX, buildSceneGeometry } from "./geometry";
 import { PointerField } from "./pointerField";
 import {
   CLEAR_HIGH,
@@ -168,11 +168,13 @@ export async function createSceneEngine(
     uReadsL: { value: new THREE.Vector3() },
     uReadsR: { value: new THREE.Vector3() },
     uReadsScale: { value: 1 },
+    uReadsClear: { value: new THREE.Vector4() },
     uBandY: { value: -1 },
     uField: { value: new THREE.Vector4(FIELD_SPEED, FIELD_NEAR, FIELD_FAR, 0.4) },
     uFieldClear: { value: new THREE.Vector4() },
     uShips: { value: [0, 1, 2, 3].map(() => new THREE.Vector4(0, 0, 0, 1)) },
     uBright: { value: 1 },
+    uSLevel: { value: 1 },
     uGlow: { value: 0 },
     uShimmer: { value: 1 },
     uSize: { value: geo.spacing * SPRITE_SHARE },
@@ -311,6 +313,7 @@ export async function createSceneEngine(
   const splitQuat = new THREE.Quaternion();
   const m1 = new THREE.Matrix4();
   const m2 = new THREE.Matrix4();
+  const centring = new THREE.Matrix4();
   const projected = new THREE.Vector3();
 
   function update(dt: number) {
@@ -373,7 +376,10 @@ export async function createSceneEngine(
     markQuat.setFromEuler(euler);
     const s = look.scale * (1 + breathe * 0.012 * Math.sin(elapsed * 0.5));
     markScale.set(s, s, s);
-    u.uMark.value.compose(markPos, markQuat, markScale);
+    // `centre` moves the mark's visual middle (not the C's centre) onto markPos,
+    // and it breathes about that middle.
+    centring.makeTranslation(-MARK_VISUAL_CX * look.centre, 0, 0);
+    u.uMark.value.compose(markPos, markQuat, markScale).multiply(centring);
 
     // The S drifting off the C, turning about its own centre.
     const sp = look.split;
@@ -393,6 +399,7 @@ export async function createSceneEngine(
     unproject(u.uReadsL.value, -layout.readsX, layout.readsY, 0);
     unproject(u.uReadsR.value, layout.readsX, layout.readsY, 0);
     u.uReadsScale.value = layout.readsWidth * tanH * aspect * camZ;
+    u.uReadsClear.value.fromArray(layout.readsClear);
     u.uBandY.value = layout.bandY * tanH * camZ;
     u.uField.value.set(FIELD_SPEED, FIELD_NEAR, FIELD_FAR, Math.min(1, layout.fieldPoints / geo.count));
     u.uFieldClear.value.fromArray(layout.fieldClear);
@@ -412,6 +419,7 @@ export async function createSceneEngine(
     u.uIntroTime.value = introOn ? introTime : 0;
     u.uIntroGlobal.value = introGlobal;
     u.uBright.value = look.bright;
+    u.uSLevel.value = look.sLevel;
     u.uGlow.value = look.glow;
     u.uShimmer.value = look.shimmer;
     u.uSize.value = geo.spacing * SPRITE_SHARE * look.size;
@@ -438,13 +446,15 @@ export async function createSceneEngine(
     post.uFill.value.set(fillIn, fillOut);
     post.uFillAlpha.value = reduced ? 0.9 : 1;
 
-    // Glow and the intro dot sit on the mark's projected centre.
-    projected.copy(markPos).project(camera);
+    // The glow sits on the C's centre; the intro dot on the point the intro
+    // grows from (the mark's visual middle).
+    projected.set(0, 0, 0).applyMatrix4(u.uMark.value).project(camera);
+    const markRadius = (MARK_EXTENT * look.scale) / (markDist * tanH) / 2;
+    post.uGlow.value.set(projected.x * 0.5 + 0.5, projected.y * 0.5 + 0.5, look.glow * markWeight(form) * introGlobal);
+    post.uGlowRadius.value = markRadius * 0.75;
+    projected.set(MARK_VISUAL_CX, 0, 0).applyMatrix4(u.uMark.value).project(camera);
     const cx = projected.x * 0.5 + 0.5;
     const cy = projected.y * 0.5 + 0.5;
-    const markRadius = (MARK_EXTENT * look.scale) / (markDist * tanH) / 2;
-    post.uGlow.value.set(cx, cy, look.glow * markWeight(form) * introGlobal);
-    post.uGlowRadius.value = markRadius * 0.75;
 
     let dotAlpha = 0;
     let dotRadius = 0;

@@ -66,9 +66,9 @@ through instead of snapping. States blend over windows in P, smootherstep eased.
 
 | section | formation | camera and subject (desktop) | notes |
 |---|---|---|---|
-| hero | M | fit 1.78 (mark ≈ 69% of height), centre, breathing ±0.16 rad | full disturbance |
+| hero | M | fit 1.78 (mark ≈ 69% of height), visual bounds centred, brightness 0.65, S held to 0.5 (C level), breathing ±0.16 rad | the headline leads; full disturbance |
 | problem | M | pull back to fit 2.7, mark to NDC x −0.42; the S slides +0.72 right, 1.9 back, turns 0.55 rad | right half calm: no disturbance or shimmer past 45% width |
-| reads | R | fit 2.4 | M → R over P 1.82–2.32; centre stays dark |
+| reads | R | fit 2.4 | M → R over P 1.82–2.32; centre stays dark; a feathered disc (~5–6.5vw) behind each eye + label dims to 30% |
 | proof | B | fill sweeps in over value 0–0.35, holds at 0.82–1 opacity | R → B over 2.95–3.38, under the fill |
 | evidence | F | calm, disturbance 0.3 | fill clears over P 3.82–4.12; B → F under it |
 | ships | S | clusters at x 0.6–0.8 | F → S over 4.88–5.3 |

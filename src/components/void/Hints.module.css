@@ -27,6 +27,7 @@
 
 .idleText {
   word-spacing: normal;
+  --word-spacing: normal;
 }
 
 .idleKeys {

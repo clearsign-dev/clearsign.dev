@@ -103,7 +103,6 @@ body {
   font-family: var(--font-mono);
   font-weight: 400;
   line-height: 120%;
-  word-spacing: var(--word-spacing-mono);
   scrollbar-width: none;
   -ms-overflow-style: none;
   overflow-x: hidden;
@@ -111,6 +110,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* The reference's tight word spacing (-0.35em), worked out on every element
+   from its own font size. Set on body alone, it would be computed once at
+   16px and inherited as a fixed -5.6px, which closes the gaps in small text
+   completely. Anything that wants ordinary spacing sets --word-spacing:
+   normal, and its descendants inherit that. */
+:root {
+  --word-spacing: var(--word-spacing-mono);
+}
+
+:where(*) {
+  word-spacing: var(--word-spacing);
 }
 
 html::-webkit-scrollbar,
@@ -173,6 +185,7 @@ pre,
   max-width: 46ch;
   text-wrap: pretty;
   word-spacing: normal;
+  --word-spacing: normal;
 }
 
 @media (max-width: 1435px) {

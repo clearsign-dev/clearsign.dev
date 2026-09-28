@@ -133,6 +133,7 @@
   font-weight: var(--display-weight);
   letter-spacing: var(--display-tracking);
   word-spacing: normal;
+  --word-spacing: normal;
   text-transform: uppercase;
   line-height: 0.9;
   white-space: nowrap;
@@ -158,6 +159,7 @@
   line-height: 1.15;
   letter-spacing: 0;
   word-spacing: normal;
+  --word-spacing: normal;
   text-transform: none;
   color: var(--ink);
   text-wrap: balance;
@@ -169,6 +171,7 @@
   font-size: clamp(12px, 1.85cqi, 17px);
   line-height: 1.4;
   word-spacing: normal;
+  --word-spacing: normal;
   color: var(--text);
   text-wrap: pretty;
 }

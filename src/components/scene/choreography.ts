@@ -25,6 +25,8 @@ export type Look = {
   my: number;
   mz: number;
   scale: number;
+  /** Centre the mark on its visual bounds instead of the C's centre (0..1). */
+  centre: number;
   tiltX: number;
   tiltY: number;
   /** Amplitude of the slow breathing rotation. */
@@ -32,6 +34,8 @@ export type Look = {
   /** How far the S has drifted from the C (0..1). */
   split: number;
   bright: number;
+  /** The S's brightness relative to the C: its tube is denser than the rods. */
+  sLevel: number;
   /** getIt's inner light (0..1). */
   glow: number;
   size: number;
@@ -53,11 +57,13 @@ const LOOK_KEYS: (keyof Look)[] = [
   "my",
   "mz",
   "scale",
+  "centre",
   "tiltX",
   "tiltY",
   "breathe",
   "split",
   "bright",
+  "sLevel",
   "glow",
   "size",
   "disturb",
@@ -76,11 +82,13 @@ const BASE: Look = {
   my: 0,
   mz: 0,
   scale: 1,
+  centre: 0,
   tiltX: 0,
   tiltY: 0,
   breathe: 0.5,
   split: 0,
   bright: 1,
+  sLevel: 1,
   glow: 0,
   size: 1,
   disturb: 0.8,
@@ -102,8 +110,9 @@ const DESKTOP_PROBLEM_MARK: Partial<Look> = { mx: -0.42, my: 0.02, tiltX: 0.06, 
 const DESKTOP_GETIT_MARK: Partial<Look> = { mx: -0.45, my: 0.3, scale: 0.72, tiltY: 0.1 };
 
 export const DESKTOP_LOOKS: readonly Look[] = [
-  // hero: centred behind the headline, breathing, fully alive to the pointer
-  look({ fit: 1.78, my: 0.05, breathe: 1, disturb: 1, vignette: 0.55, parallax: 1, haze: 1 }),
+  // hero: centred behind the headline and kept dim so the headline leads (as the
+  // reference's octagon is), the S held to the C's level; breathing, alive to the pointer
+  look({ fit: 1.78, my: 0.05, centre: 1, bright: 0.65, sLevel: 0.5, breathe: 1, disturb: 1, vignette: 0.55, parallax: 1, haze: 1 }),
   // problem: pull back, the S drifts off the C; the right half stays quiet
   look({ fit: 2.7, ...DESKTOP_PROBLEM_MARK, breathe: 0.55, bright: 0.92, disturb: 0.85, calmRight: 1, ca: 0.9 }),
   // reads: two byte lattices behind the hotspots, centre dark
@@ -126,7 +135,7 @@ const MOBILE_GETIT_MARK: Partial<Look> = { fit: 2.3, my: 0.12, scale: 0.72, tilt
 // ≤ 1024px. `fit` is half the shorter side, so on a phone the mark spans the
 // width; the subject rides up behind the text, which stacks full width here.
 export const MOBILE_LOOKS: readonly Look[] = [
-  look({ fit: 1.5, my: 0.14, breathe: 1, disturb: 0.9, vignette: 0.5, parallax: 1, haze: 1 }),
+  look({ fit: 1.5, my: 0.14, centre: 1, bright: 0.65, sLevel: 0.5, breathe: 1, disturb: 0.9, vignette: 0.5, parallax: 1, haze: 1 }),
   look({ ...MOBILE_PROBLEM_MARK, breathe: 0.55, bright: 0.9, disturb: 0.6 }),
   look({ ...MOBILE_PROBLEM_MARK, breathe: 0.4, bright: 0.95, disturb: 0.5, shimmer: 0.8, ca: 0.85, vignette: 0.6, grid: 0.8, parallax: 0.6, haze: 0.7 }),
   look({ ...MOBILE_PROBLEM_MARK, breathe: 0.4, disturb: 0.3, shimmer: 0.6, ca: 0.7, vignette: 0.65, grid: 0.4, parallax: 0.5, haze: 0.5 }),
@@ -145,6 +154,12 @@ export type FormLayout = {
   readsX: number;
   readsY: number;
   readsWidth: number;
+  /**
+   * Disc dimmed to 30% in each lattice, behind the hotspot's eye and label:
+   * centre x, centre y, outer radius, feather, in lattice units (width 1).
+   * Radius 0 turns it off.
+   */
+  readsClear: [number, number, number, number];
   /** Band height at the subject plane, NDC. */
   bandY: number;
   /** Field: the NDC rectangle kept clear (x0, y0, x1, y1), and how many points it shows. */
@@ -164,6 +179,9 @@ export const DESKTOP_LAYOUT: FormLayout = {
   readsX: 0.72,
   readsY: 0,
   readsWidth: 0.36,
+  // Lattice width 1 = 18vw: dim within ~5vw of the eye, back to full by ~6.5vw,
+  // centred a little low so the "Hover to explore" label is covered too.
+  readsClear: [0, -0.08, 0.36, 0.08],
   bandY: -0.62,
   // The slider's description and cards live centre-left.
   fieldClear: [-0.95, -0.7, 0.15, 0.75],
@@ -186,6 +204,7 @@ export const MOBILE_LAYOUT: FormLayout = {
   readsX: 0.5,
   readsY: 0.3,
   readsWidth: 0.62,
+  readsClear: [0, 0, 0, 0],
   bandY: -0.7,
   fieldClear: [-1.3, -0.5, 1.3, 0.42],
   fieldPoints: 5000,

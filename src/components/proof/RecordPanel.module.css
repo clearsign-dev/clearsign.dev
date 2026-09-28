@@ -2,6 +2,8 @@
    highlight and an inset hairline), blurred over the scene behind it. */
 
 .panel {
+  /* Data labels: ordinary word spacing, not the interface's tight -0.35em. */
+  --word-spacing: normal;
   position: relative;
   width: min(30rem, 44vw);
   padding: 1rem 1rem 1.1rem;
@@ -72,6 +74,7 @@
   min-width: 0;
   color: var(--ink);
   word-spacing: normal;
+  --word-spacing: normal;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
@@ -114,6 +117,7 @@
   font-size: 0.75rem;
   line-height: 1.4;
   word-spacing: normal;
+  --word-spacing: normal;
 }
 
 .code {
@@ -130,6 +134,7 @@
   letter-spacing: var(--display-tracking);
   text-transform: uppercase;
   word-spacing: normal;
+  --word-spacing: normal;
   color: var(--sev-critical);
 }
 
@@ -139,6 +144,7 @@
   font-size: 0.6875rem;
   line-height: 1.45;
   word-spacing: normal;
+  --word-spacing: normal;
   color: var(--grey-100);
   text-wrap: pretty;
 }
@@ -154,6 +160,7 @@
   font-size: 0.6875rem;
   line-height: 1.4;
   word-spacing: normal;
+  --word-spacing: normal;
   white-space: nowrap;
   color: var(--sev);
   background: color-mix(in srgb, var(--sev) 12%, transparent);
@@ -215,6 +222,7 @@
   font-size: 0.72rem;
   line-height: 1.35;
   word-spacing: normal;
+  --word-spacing: normal;
   color: var(--grey-300);
   opacity: 0;
   transform: translate3d(0, 4px, 0);
@@ -235,6 +243,7 @@
   font-size: 0.6875rem;
   line-height: 1.45;
   word-spacing: normal;
+  --word-spacing: normal;
   color: var(--text);
 }
 

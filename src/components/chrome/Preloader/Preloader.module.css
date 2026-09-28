@@ -12,6 +12,7 @@
   color: var(--grey-300);
   font-family: var(--font-mono);
   word-spacing: normal;
+  --word-spacing: normal;
   outline: none;
   touch-action: none;
   overscroll-behavior: contain;
