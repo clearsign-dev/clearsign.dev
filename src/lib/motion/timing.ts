@@ -278,3 +278,21 @@ export const SECTION_REVEAL_COMPLETE = {
     CONTACT_TIMING.mobile.revealWindow,
   ],
 } as const;
+
+// The table the stage lands on and the ruler draws from. Contact switches to
+// its stacked timing at a wider breakpoint (≤1255px) than everything else
+// (≤1024px), as on the reference. Arrays are cached so each layout combination
+// always gets the same array instance.
+const revealTables = new Map<string, readonly number[]>();
+
+export function sectionRevealTable(isMobile: boolean, isContactStacked: boolean): readonly number[] {
+  const key = `${+isMobile}${+isContactStacked}`;
+  let table = revealTables.get(key);
+  if (!table) {
+    const base = isMobile ? SECTION_REVEAL_COMPLETE.mobile : SECTION_REVEAL_COMPLETE.desktop;
+    const contact = isContactStacked ? CONTACT_TIMING.mobile.revealWindow : CONTACT_TIMING.desktop.revealWindow;
+    table = [...base.slice(0, -1), contact];
+    revealTables.set(key, table);
+  }
+  return table;
+}

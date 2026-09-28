@@ -3,7 +3,7 @@
 import Lenis from "lenis";
 import { useEffect, useRef, type ComponentType, type ReactNode } from "react";
 import { playSfx } from "@/lib/audio/sfx";
-import { SECTION_REVEAL_COMPLETE } from "@/lib/motion/timing";
+import { sectionRevealTable } from "@/lib/motion/timing";
 import {
   BASE_VIRTUAL_SCROLL_HEIGHT,
   MOBILE_SCROLL_HEIGHT_SCALE,
@@ -140,9 +140,8 @@ export function Stage({ sections, children }: StageProps) {
         const now = performance.now();
         if (i === lastRequest.index && now - lastRequest.at < 280) return;
         lastRequest = { index: i, at: now };
-        const reveal = readLayoutFlags().isMobile
-          ? SECTION_REVEAL_COMPLETE.mobile
-          : SECTION_REVEAL_COMPLETE.desktop;
+        const flags = readLayoutFlags();
+        const reveal = sectionRevealTable(flags.isMobile, flags.isContactStacked);
         this.toProgress(globalAt(i, reveal[i] ?? 0), options);
       },
       toProgress(global, options) {

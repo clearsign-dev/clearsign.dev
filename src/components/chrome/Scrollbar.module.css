@@ -1,0 +1,77 @@
+/* The right-edge scroll bar. The hit area is wider than what is drawn, so the
+   bar is easy to grab; it stays hoverable while invisible, so reaching the edge
+   brings it back. */
+
+.scrollbar {
+  --hit: 0.875rem;
+  --track-width: 2px;
+  --thumb-width: 4px;
+  --thumb-width-active: 6px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: fixed;
+  top: var(--offset-x);
+  bottom: var(--offset-x);
+  right: 0;
+  z-index: 104;
+  width: var(--hit);
+  cursor: grab;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 320ms var(--ease);
+}
+
+.visible {
+  opacity: 1;
+}
+
+.dragging {
+  cursor: grabbing;
+}
+
+.track {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: calc((var(--hit) - var(--track-width)) / 2);
+  width: var(--track-width);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.12);
+}
+
+.thumb {
+  position: absolute;
+  top: 0;
+  right: calc((var(--hit) - var(--thumb-width)) / 2);
+  width: var(--thumb-width);
+  height: 3.5rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgb(var(--accent-rgb) / 0.65) 0%, var(--accent) 100%);
+  box-shadow: 0 0 12px rgb(var(--accent-rgb) / 0.45);
+  will-change: transform;
+  transition:
+    width 200ms var(--ease),
+    right 200ms var(--ease),
+    box-shadow 200ms ease;
+}
+
+.scrollbar:hover .thumb,
+.dragging .thumb {
+  width: var(--thumb-width-active);
+  right: calc((var(--hit) - var(--thumb-width-active)) / 2);
+  box-shadow: 0 0 18px rgb(var(--accent-rgb) / 0.6);
+}
+
+/* Phones: the bottom-right corner belongs to the audio button. */
+@media (max-width: 767px) {
+  .scrollbar {
+    display: none;
+  }
+}
+
+/* The fade is kept; the thumb's width change is not animated. */
+@media (prefers-reduced-motion: reduce) {
+  .thumb {
+    transition: none;
+  }
+}
