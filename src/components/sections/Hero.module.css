@@ -36,6 +36,11 @@
   font-size: 15px;
   /* Declared here, not inherited, so the em follows each font step. */
   word-spacing: var(--word-spacing-mono);
+  /* The mark sits behind this row, as the reference's octagon sits behind
+     its; a dark halo keeps the grey text readable over bright points. */
+  text-shadow:
+    0 0 6px var(--ground),
+    0 0 14px var(--ground);
 }
 
 @media (min-width: 768px) {

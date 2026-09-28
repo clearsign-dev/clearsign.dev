@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, type ElementType } from "react";
+import { useMemo, useRef, useSyncExternalStore, type ElementType } from "react";
 import { EASE, isMobileMotionContext, powerOut, prefersReducedMotion, scaleDuration } from "@/lib/motion/easings";
 import { SplitText, segmentsText, type Segment } from "./SplitText";
 import { useScrubbedReveal } from "./useScrubbedReveal";
@@ -66,6 +66,27 @@ function lineKeyframes(offsetY: string): Keyframe[] {
   ];
 }
 
+type RevealMode = "character" | "line" | "block";
+
+// The reveal mode depends on the device, which the server cannot know. The
+// server and the first client render both use "character", so hydration
+// matches, and the real mode arrives on the next render.
+const MODE_QUERIES = ["(prefers-reduced-motion: reduce)", "(max-width: 1024px)", "(hover: none), (pointer: coarse)"];
+
+function subscribeMode(listener: () => void) {
+  const lists = MODE_QUERIES.map((q) => window.matchMedia(q));
+  lists.forEach((l) => l.addEventListener("change", listener));
+  return () => lists.forEach((l) => l.removeEventListener("change", listener));
+}
+
+function readMode(): RevealMode {
+  return prefersReducedMotion() ? "block" : isMobileMotionContext() ? "line" : "character";
+}
+
+function useMotionMode(): RevealMode {
+  return useSyncExternalStore(subscribeMode, readMode, () => "character");
+}
+
 // Group word spans into visual lines by their offsetTop, so every word in a
 // line starts together.
 function lineStagger(step: number) {
@@ -102,9 +123,8 @@ export function RevealText({
   className = "",
 }: RevealTextProps) {
   const ref = useRef<HTMLElement>(null);
-  const [mode] = useState<"character" | "line" | "block">(() =>
-    !split || prefersReducedMotion() ? "block" : isMobileMotionContext() ? "line" : "character",
-  );
+  const motionMode = useMotionMode();
+  const mode: RevealMode = split ? motionMode : "block";
 
   const blur = mode === "character";
   const y = offsetY ?? (mode === "line" ? "0.72em" : mode === "character" ? "0.4em" : "16px");
