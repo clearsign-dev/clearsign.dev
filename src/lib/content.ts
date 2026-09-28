@@ -42,6 +42,8 @@ export const HEADER = {
   soundKicker: "Ambient",
   soundOn: "Sound on",
   soundOff: "Sound off",
+  soundEnable: "Enable sound",
+  soundMute: "Mute sound",
 } as const;
 
 // 0 — Opening. Anatomy: the reference hero.

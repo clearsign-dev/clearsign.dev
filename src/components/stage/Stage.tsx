@@ -162,9 +162,10 @@ export function Stage({ sections, children }: StageProps) {
 
     // Keyboard: one key press moves one section.
     const onKey = (event: KeyboardEvent) => {
-      if (!canScroll.get()) return;
+      if (!canScroll.get() || event.defaultPrevented) return;
       const origin = event.target as HTMLElement | null;
-      if (origin?.closest("input, textarea, select, [contenteditable='true']")) return;
+      // Controls that use the keys themselves keep them (fields, sliders, the sound pill).
+      if (origin?.closest("input, textarea, select, [contenteditable='true'], [role='slider'], [data-own-keys]")) return;
       const step = stageProgress.get().step;
       let target: number | null = null;
       if (["ArrowDown", "PageDown"].includes(event.key) || (event.key === " " && !event.shiftKey)) {
