@@ -6,9 +6,9 @@ UI-only. Rebrand of the 2026 daoism.systems. PRD: `PRD.md`.
 
 | Route | Page | Status |
 |---|---|---|
-| `/` | The stage, eight sections | build |
-| `/privacy` | Privacy | build |
-| 404 (`not-found.tsx`) | Void page with the Konami-code game | build |
+| `/` | The stage, eight sections | built, checked at 1440×900, 1024×768, 768×1024 and 390×844 |
+| `/privacy` | Privacy | built |
+| 404 (`not-found.tsx`) | Void page with the Konami-code game | built, game played through headless |
 
 The reference's `/_octagon` showreel route is not built: it has no content of its own.
 
