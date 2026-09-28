@@ -1,0 +1,62 @@
+# Publish the site to GitHub Pages.
+#
+# The build is a static export — plain files, no server, nothing running at
+# request time — so Pages is enough and there is nothing to keep alive.
+#
+# Two things to know before this works:
+#   - Pages on a Free plan needs the repository to be public.
+#   - Settings -> Pages -> Source must be set to "GitHub Actions" once, by hand.
+#     Nothing here can set it for you.
+#
+# Served at a custom domain (clearsign.dev) the paths are right as they are. If
+# it is ever served from a subpath such as <org>.github.io/clearsign.dev/, set
+# basePath and assetPrefix in next.config.ts or every asset will 404.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time. A queued run is allowed to finish rather than be
+# cancelled, so a half-uploaded site is never what is live.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - name: Install exactly what the lockfile names
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Check the export is really static
+        run: |
+          set -euo pipefail
+          test -f out/index.html
+          test -f out/privacy/index.html
+          test -f out/404.html
+          # Pages would otherwise treat _next/ as Jekyll source and drop it.
+          touch out/.nojekyll
+          echo "publishing $(find out -type f | wc -l | tr -d ' ') files"
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: out
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
