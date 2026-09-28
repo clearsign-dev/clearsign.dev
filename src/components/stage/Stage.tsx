@@ -159,6 +159,15 @@ export function Stage({ sections, children }: StageProps) {
       },
     });
 
+    // Development only: lets QA scripts jump the stage without easing.
+    if (process.env.NODE_ENV !== "production") {
+      (window as unknown as { __stage?: object }).__stage = {
+        jump: (global: number) => {
+          lenis.scrollTo(Math.max(0, Math.min(1, global)) * lenis.limit, { immediate: true, force: true });
+        },
+      };
+    }
+
     // Keyboard: one key press moves one section.
     const onKey = (event: KeyboardEvent) => {
       if (!canScroll.get() || event.defaultPrevented) return;

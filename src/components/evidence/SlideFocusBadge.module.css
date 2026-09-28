@@ -1,0 +1,65 @@
+.badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 2.5rem;
+  padding: 6.7px 17.86px;
+  border-radius: 4.47px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  word-spacing: var(--word-spacing-mono);
+  box-shadow:
+    0 8px 18px color-mix(in srgb, var(--ground) 22%, transparent),
+    0 2px 4px color-mix(in srgb, var(--ground) 18%, transparent);
+  pointer-events: none;
+}
+
+/* Desktop keeps the cursor-following tooltip instead. */
+@media (min-width: 1025px) {
+  .badge {
+    display: none;
+  }
+}
+
+.viewport {
+  display: block;
+  overflow: hidden;
+  max-width: 16rem;
+  will-change: width, height;
+  transform: translateZ(0);
+}
+
+/* A fixed wrap width, independent of the animating clip box, so every label
+   measures the same whatever the reel is doing. */
+.track {
+  display: block;
+  width: 14rem;
+  will-change: transform;
+}
+
+.item {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  width: fit-content;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.count {
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    will-change: auto;
+  }
+}

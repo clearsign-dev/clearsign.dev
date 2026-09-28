@@ -13,7 +13,9 @@ import { SmokeTransitionLayer } from "@/components/chrome/SmokeTransition";
 import { ScrollIndicator } from "@/components/chrome/ScrollIndicator";
 import { ScrollTracker } from "@/components/chrome/ScrollTracker";
 import { Scrollbar } from "@/components/chrome/Scrollbar";
+import { Scene } from "@/components/scene/Scene";
 import { Contact } from "@/components/sections/Contact";
+import { Evidence } from "@/components/sections/Evidence";
 import { GetIt } from "@/components/sections/GetIt";
 import { Hero } from "@/components/sections/Hero";
 import { Problem } from "@/components/sections/Problem";
@@ -44,6 +46,7 @@ const BUILT: Partial<Record<string, ComponentType<SectionProps>>> = {
   problem: Problem,
   reads: Reads,
   proof: Proof,
+  evidence: Evidence,
   ships: Ships,
   getIt: GetIt,
   contact: Contact,
@@ -60,6 +63,7 @@ export function HomeStage() {
       <IntroController />
       <AudioEngine />
       <Stage sections={SECTION_COMPONENTS}>
+        <Scene />
         <CircleBackground />
         <Header />
         <ScrollIndicator />

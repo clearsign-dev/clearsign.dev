@@ -1,0 +1,44 @@
+/* The train fills the section behind its copy (the reference draws it in
+   WebGL under the DOM). Cards are positioned by transform from the frame
+   loop; this file only sets up the camera and the hit areas. */
+
+.root {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  /* The camera: its distance to the train, looking at the viewport centre. */
+  perspective: var(--perspective, 2000px);
+  perspective-origin: 50% 50%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Keyboard focus shows on the focused card (see SlideCard). */
+.stage:focus-visible {
+  outline: none;
+}
+
+/* A full-width strip through the cards: press anywhere on it to drag. Vertical
+   swipes stay with the page; horizontal ones become drags. */
+.band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 30%;
+  height: 40%;
+  pointer-events: none;
+  touch-action: pan-y;
+}
+
+.stage[data-interactive="true"] .band {
+  pointer-events: auto;
+}

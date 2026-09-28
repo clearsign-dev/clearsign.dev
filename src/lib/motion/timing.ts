@@ -272,7 +272,8 @@ export const SECTION_REVEAL_COMPLETE = {
     PROBLEM_TIMING.mobile.window.revealEnd,
     READS_TIMING.mobile.window.revealEnd,
     PROOF_TIMING.mobile.window.revealEnd,
-    EVIDENCE_TIMING.mobile.content.end,
+    // Land on the first slide rather than between the second and third.
+    EVIDENCE_TIMING.mobile.slides.start,
     SHIPS_TIMING.mobile.window.revealEnd,
     GET_IT_TIMING.mobile.beats.cardsReveal.end,
     CONTACT_TIMING.mobile.revealWindow,

@@ -1,0 +1,260 @@
+/* An evidence card: the reference's card surface (translucent grey, a faint
+   highlight, hairline inset, one clipped corner) sized like its slides. The
+   train writes transform, z-index and --focus; everything else is here. */
+
+.card {
+  --focus: 0;
+  --glow: 0;
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --edge: color-mix(in srgb, var(--hairline) 15%, transparent);
+  --edge-top: color-mix(in srgb, var(--hairline) 25%, transparent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--card-w, 480px);
+  height: var(--card-h, 240px);
+  box-sizing: border-box;
+  container-type: inline-size;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  backface-visibility: hidden;
+  pointer-events: none;
+  touch-action: pan-y;
+  overflow: hidden;
+  clip-path: var(--clip-corner);
+  color: var(--ink);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--hairline) 30%, transparent),
+      transparent 44%
+    ),
+    var(--grey-600);
+  box-shadow:
+    inset 0 1px 0 var(--edge-top),
+    inset 0 0 0 1px var(--edge);
+}
+
+/* "Not true yet": one restrained amber edge, and the kicker in the same tone. */
+.card[data-gap] {
+  box-shadow:
+    inset 2px 0 0 color-mix(in srgb, var(--sev-blind) 70%, transparent),
+    inset 0 1px 0 var(--edge-top),
+    inset 0 0 0 1px var(--edge);
+}
+
+:global([data-interactive="true"]) .card {
+  pointer-events: auto;
+}
+
+/* Pointer glow: a soft light where the cursor is, with a trace of the accent. */
+.glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--glow);
+  transition: opacity 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  background: radial-gradient(
+    34rem circle at var(--glow-x) var(--glow-y),
+    color-mix(in srgb, var(--hairline) 45%, transparent) 0%,
+    color-mix(in srgb, var(--hairline) 18%, transparent) 24%,
+    rgb(var(--accent-rgb) / 0.08) 45%,
+    rgb(var(--accent-rgb) / 0) 72%
+  );
+  mix-blend-mode: screen;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  height: 100%;
+  padding: clamp(14px, 3.4cqi, 28px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "head head"
+    ". ."
+    "figure text";
+  column-gap: clamp(12px, 3cqi, 28px);
+}
+
+.head {
+  grid-area: head;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1.55cqi, 13px);
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  word-spacing: var(--word-spacing-mono);
+  text-transform: uppercase;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  margin: 0;
+  color: var(--grey-300);
+}
+
+.dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  background: color-mix(in srgb, var(--accent) calc(var(--focus) * 100%), var(--grey-100));
+}
+
+.card[data-gap] .kicker {
+  color: var(--sev-blind);
+}
+
+.card[data-gap] .dot {
+  background: var(--sev-blind);
+}
+
+.index {
+  color: var(--grey-100);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.figure {
+  grid-area: figure;
+  align-self: end;
+  margin: 0 0 -0.06em;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  word-spacing: normal;
+  text-transform: uppercase;
+  line-height: 0.9;
+  white-space: nowrap;
+  color: var(--heading-fill);
+  /* Big, but the longest figure still fits its half of the card. */
+  font-size: min(13cqi, calc(75cqi / var(--chars, 4)));
+}
+
+.text {
+  grid-area: text;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: clamp(14px, 2.7cqi, 26px);
+  line-height: 1.15;
+  letter-spacing: 0;
+  word-spacing: normal;
+  text-transform: none;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(12px, 1.85cqi, 17px);
+  line-height: 1.4;
+  word-spacing: normal;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+/* Out of focus: dimmer, with the edges pulled in (the reference's 0.62
+   brightness and inner vignette). */
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: calc(1 - var(--focus));
+  background: color-mix(in srgb, var(--ground) 38%, transparent);
+  box-shadow: inset 0 0 clamp(24px, 9cqi, 72px) color-mix(in srgb, var(--ground) 32%, transparent);
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+
+/* Narrow layouts: the centred card breathes a faint accent edge. */
+.card[data-hint] .ring {
+  box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.55);
+  animation: hint 2s ease-in-out infinite;
+}
+
+/* Keyboard focus lands on the carousel; show it on the card it controls. */
+:global([data-carousel]:focus-visible) .card[data-focused] .ring {
+  opacity: 1;
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+  animation: none;
+}
+
+@keyframes hint {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 767px) {
+  .inner {
+    padding: 16px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "head"
+      "."
+      "figure"
+      "text";
+    row-gap: 10px;
+  }
+
+  .head {
+    font-size: 10px;
+  }
+
+  .figure {
+    font-size: min(24cqi, calc(142cqi / var(--chars, 4)));
+  }
+
+  .title {
+    font-size: clamp(14px, 5.2cqi, 17px);
+  }
+
+  .body {
+    font-size: 12.5px;
+    line-height: 1.38;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card[data-hint] .ring {
+    animation: none;
+    opacity: 0.45;
+  }
+
+  .glow {
+    transition: none;
+  }
+}

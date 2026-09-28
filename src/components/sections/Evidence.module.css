@@ -1,0 +1,61 @@
+/* The copy layer. The stage section is a flex row, so on desktop the 50%
+   margin shrinks this wrapper to the right half: the heading starts at the
+   centre line and the description reaches back to the left edge. */
+
+.wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--offset-content-top);
+  height: 100%;
+  width: 100%;
+  margin-left: 0;
+  box-sizing: border-box;
+  /* The train underneath takes the pointer. */
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .wrap {
+    margin-left: var(--offset-content);
+  }
+}
+
+@media (max-width: 612px) and (min-width: 550px) {
+  .wrap :global(h2) {
+    font-size: 58px;
+  }
+}
+
+.desc {
+  position: absolute;
+  left: 0;
+  top: 4rem;
+  line-height: 1.2;
+  color: var(--text);
+  will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .desc {
+    top: 4.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desc {
+    left: -100%;
+  }
+}
+
+/* A tighter measure than the shared one: this column sits beside the train. */
+.desc :global(.section-reveal-paragraph) {
+  max-width: 40ch;
+}
+
+@media (max-width: 767px) {
+  .desc :global(.section-reveal-paragraph) {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}

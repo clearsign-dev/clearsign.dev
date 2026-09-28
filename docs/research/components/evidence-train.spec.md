@@ -89,7 +89,8 @@ For slide `i` and damped visual index `v`: `d = i - v`
 - The stage is `role="region" aria-roledescription="carousel"`, `tabIndex=0`,
   labelled by the heading text. ArrowLeft/ArrowRight one slide, Home/End first/
   last (propagation stopped so the stage's own Home/End don't fire). Up/Down
-  stay with the page. Keyboard steps glide 0.55s (one slide flung at tau).
+  stay with the page. Keyboard and tap steps glide as a fling at 1/tau
+  slides/s: 0.55s per slide, 0.35-1.4s, expo-out. Reduced motion jumps.
 - Each card is `role="group" aria-roledescription="slide" aria-label="k of n"`.
 - Focus ring: accent inset ring on the focused card when the region has
   `:focus-visible`. A polite live region (only while focused) reads the slide.
@@ -100,4 +101,16 @@ For slide `i` and damped visual index `v`: `d = i - v`
   cursor (see `slide-tooltip.spec.md`); hidden while dragging.
 - Pointer over the drag band or a card sets `cursor` store `{label: "Drag",
   active: true}`; leaving clears it if the label is still ours.
+- While the train moves under a resting cursor the hover is re-checked every
+  120ms (the reference re-raycasts at the same rate).
 - Not rebuilt: the harmonica UV bands and fluid warp (image effects).
+
+## Runtime
+
+- `trainController.ts` owns the frame loop: it sleeps once everything has
+  settled and wakes on progress, pointer, resize or reduced-motion changes.
+- Transforms, z-index and `--focus` are written to the cards directly; React
+  re-renders only when the focused slide changes.
+- Cards wholly off-screen get `visibility: hidden` so they skip painting.
+- Anything else that moves the page (wheel, touch, a press or key outside the
+  carousel) cancels a glide the train started.

@@ -50,7 +50,7 @@ From `brand/make-mark.py` (1024 grid / 292):
 | M | mark | above, transformed by `uMark` (position from NDC, scale, tilt, breathing) and `uSplit` for S points |
 | R | reads | two lattices of 5 × 6 byte-blocks (filled 3D dot blocks, some dim), centred at 14% / 86% of the width on the vertical centre, 18vw wide; a scan line walks down the rows |
 | B | band | a lattice strip of 5 rows × 10 depth layers × N/50 columns, full width, low on screen, gentle wave |
-| F | field | random points across the frustum, z from +2 to −22, receding at 0.35 u/s with wrap; ~40% shown; a soft rectangle clears the text zone |
+| F | field | random points across the frustum, z from +2 to −22, receding at 0.35 u/s with wrap; 14k shown (5k ≤ 1024px) whatever the tier; a soft rectangle clears the text zone |
 | S | ships | four clusters down the right side, each deeper: a cube, a slab, three text-line rods, a ring; each turns slowly |
 
 Screen-anchored formations (R, B, F, S) are stored in NDC and unprojected in the shader
@@ -109,7 +109,7 @@ and settles back as the field decays. Idle field = no uploads.
 | haze | accent-deep × 0.1, centre-weighted, slow noise |
 | grid | 14 CSS px pitch, 0.65 px dots, ink × 0.055, shifted opposite the parallax |
 | vignette | half-min-dimension radius, smoothstep 0.35–0.95, 0.55–0.7 by section |
-| dot | 6 CSS px ink disc with a soft halo |
+| dot | 7 CSS px ink disc with a soft halo |
 
 Colours are read once from `--ink`, `--accent`, `--accent-deep`, `--ground` via
 `getComputedStyle(document.documentElement)`.

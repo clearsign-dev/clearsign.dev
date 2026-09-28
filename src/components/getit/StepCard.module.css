@@ -9,7 +9,9 @@
   width: 100%;
   padding: 0.75rem 0.75rem 1.25rem;
   border-radius: 0.75rem;
-  background: var(--grey-600);
+  /* The reference's translucent surface, laid over solid dark: cards stack in
+     the strip, and a passed card's text must not show through the next one. */
+  background: linear-gradient(var(--grey-600), var(--grey-600)), var(--dark);
   font-family: var(--font-mono);
   color: var(--grey-300);
   contain: layout style paint;
