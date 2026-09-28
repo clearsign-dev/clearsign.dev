@@ -1,0 +1,460 @@
+/* The gate. Reveals use the individual `scale`/`translate` properties so the
+   hover transforms on top of them still work once the reveal has settled.
+   --ease-reveal and --ease-smooth come from the shell. */
+
+.gate {
+  --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: min(92vw, 360px);
+  padding: 0 12px;
+  text-align: center;
+  color: var(--grey-300);
+  line-height: 150%;
+  word-spacing: normal;
+  translate: -50% -50%;
+  scale: 0.72;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, scale;
+}
+
+.gate[data-ready] {
+  pointer-events: auto;
+  animation: gate-in 0.86s var(--ease-reveal) 0.1s forwards;
+}
+
+.gate[data-leaving] {
+  pointer-events: none;
+  animation: gate-out 0.6s var(--ease-reveal) forwards;
+}
+
+/* The orb */
+
+.orb {
+  --ring: rgb(var(--accent-rgb) / 0.42);
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  color: var(--ink);
+  background:
+    radial-gradient(86% 76% at 50% 80%, rgb(var(--accent-rgb) / 0.55) 0%, rgb(var(--accent-rgb) / 0) 72%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, color-mix(in srgb, var(--accent-deep) 14%, var(--dark)) 96%, transparent) 0%,
+      rgb(var(--accent-deep-rgb) / 0.95) 100%
+    );
+  box-shadow:
+    0 0 28px rgb(var(--accent-deep-rgb) / 0.22),
+    0 0 66px 6px rgb(var(--accent-deep-rgb) / 0.18),
+    inset 0 11px 20px color-mix(in srgb, var(--ground) 44%, transparent);
+  scale: 0.74;
+  transition:
+    scale 0.42s var(--ease-smooth),
+    box-shadow 0.42s var(--ease-smooth),
+    filter 0.32s ease;
+}
+
+/* A second, fainter ring that opens out while START is hovered. */
+.orb::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  opacity: 0;
+  scale: 0.88;
+  pointer-events: none;
+  transition:
+    scale 0.42s var(--ease-smooth),
+    opacity 0.42s ease;
+}
+
+/* The 1px ring, drawn as one inset shadow so it has no seam. */
+.orb::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--ring);
+  pointer-events: none;
+  transition: box-shadow 0.42s var(--ease-smooth);
+}
+
+.gate[data-ready] .orb {
+  scale: 1;
+  transition:
+    scale 0.6s var(--bounce) 0.1s,
+    box-shadow 0.42s var(--ease-smooth),
+    filter 0.32s ease;
+}
+
+.gate[data-ready] .orb[data-live] {
+  --ring: color-mix(in srgb, var(--accent) 70%, var(--ink));
+  scale: 1.08;
+  box-shadow:
+    0 0 34px rgb(var(--accent-deep-rgb) / 0.3),
+    0 0 80px 8px rgb(var(--accent-deep-rgb) / 0.24),
+    inset 0 11px 20px color-mix(in srgb, var(--ground) 42%, transparent);
+  transition:
+    scale 0.42s var(--ease-smooth),
+    box-shadow 0.42s var(--ease-smooth);
+}
+
+.orb[data-live]::before {
+  opacity: 1;
+  scale: 1;
+}
+
+.gate[data-leaving] .orb {
+  animation: orb-out 0.54s var(--ease-reveal) forwards;
+}
+
+.glyph {
+  display: block;
+  width: 44px;
+  height: 24px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.glyph[data-live] {
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--ink) 50%, transparent));
+}
+
+/* Title and subtitle */
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.28rem;
+  line-height: 145%;
+}
+
+.line {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.label {
+  display: block;
+  opacity: 0;
+  scale: 0.82;
+  will-change: opacity, scale;
+}
+
+.title {
+  margin: 0.92rem 0 0.54rem;
+  font-family: var(--font-mono);
+  font-size: 1.33rem;
+  font-weight: 400;
+  line-height: 110%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.subtitle {
+  margin-bottom: 0.72rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: 0.03em;
+  color: var(--grey-300);
+}
+
+.gate[data-ready] .line:nth-child(1) .label {
+  animation: pop-in 0.75s var(--bounce) 0.2s forwards;
+}
+
+.gate[data-ready] .line:nth-child(2) .label {
+  animation: pop-in 0.75s var(--bounce) 0.3s forwards;
+}
+
+.gate[data-leaving] .label {
+  animation: label-out 0.5s var(--ease-reveal) forwards;
+}
+
+/* START */
+
+.start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.2rem;
+  padding: 0.42rem 0.72rem;
+  border: 1px solid rgb(var(--accent-rgb) / 0.52);
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgb(var(--accent-rgb) / 0.26) 0%,
+    color-mix(in srgb, color-mix(in srgb, var(--accent-deep) 45%, var(--ground)) 74%, transparent) 100%
+  );
+  color: color-mix(in srgb, var(--accent) 28%, var(--ink));
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px rgb(var(--accent-rgb) / 0.14);
+  opacity: 0;
+  scale: 0.82;
+  cursor: pointer;
+  will-change: opacity, scale, transform;
+  transition:
+    transform 0.3s var(--ease-smooth),
+    border-color 0.3s ease,
+    color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.gate[data-ready] .start {
+  animation: pop-in 0.75s var(--bounce) 0.4s forwards;
+}
+
+.gate[data-leaving] .start {
+  animation: start-out 0.45s var(--ease-reveal) forwards;
+}
+
+.start:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--ink) 75%, transparent);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--ink) 20%, transparent),
+    0 0 0 4px rgb(var(--accent-rgb) / 0.35);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .start:hover {
+    transform: translateY(-1px) scale(1.04);
+    border-color: color-mix(in srgb, color-mix(in srgb, var(--accent) 45%, var(--ink)) 68%, transparent);
+    color: color-mix(in srgb, var(--accent) 12%, var(--ink));
+    box-shadow:
+      0 12px 28px color-mix(in srgb, var(--ground) 42%, transparent),
+      0 0 24px rgb(var(--accent-rgb) / 0.2);
+  }
+}
+
+.start:active {
+  transform: scale(0.97);
+}
+
+/* Tablets get a larger glass pill. */
+@media (min-width: 767px) and (max-width: 1024px), (min-width: 767px) and (pointer: coarse) {
+  .gate .start {
+    box-sizing: border-box;
+    min-width: 120px;
+    height: 48px;
+    padding: 0.375rem 1rem;
+    border: 0.5px solid rgb(var(--accent-rgb) / 0.5);
+    border-radius: 54px;
+    background: color-mix(in srgb, color-mix(in srgb, var(--accent-deep) 45%, var(--ground)) 50%, transparent);
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    color: color-mix(in srgb, var(--accent) 28%, var(--ink));
+    font-size: 14px;
+    letter-spacing: normal;
+    box-shadow: 0 8px 24px rgb(var(--accent-rgb) / 0.14);
+  }
+}
+
+@media (max-width: 1400px) {
+  .gate {
+    gap: 6px;
+  }
+
+  .orb {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .gate {
+    gap: 5px;
+    width: min(90vw, 300px);
+    line-height: 145%;
+  }
+
+  .orb {
+    width: 46px;
+    height: 46px;
+  }
+}
+
+@media (max-width: 640px) {
+  .gate {
+    width: min(88vw, 250px);
+    line-height: 135%;
+  }
+
+  .orb {
+    width: 40px;
+    height: 40px;
+  }
+
+  .glyph {
+    width: 30px;
+    height: 18px;
+  }
+}
+
+/* Narrow phones: the subtitle may wrap rather than run off the screen. */
+@media (max-width: 555px) {
+  .gate {
+    gap: 15px;
+  }
+
+  .subtitleLine {
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    line-height: 135%;
+  }
+}
+
+/* Reduced motion: the gate fades in and out as one piece. */
+@media (prefers-reduced-motion: reduce) {
+  .gate {
+    scale: 1;
+  }
+
+  .gate[data-ready] {
+    animation: fade-in 0.3s ease forwards;
+  }
+
+  .gate[data-leaving] {
+    animation: fade-out 0.3s ease forwards;
+  }
+
+  .orb,
+  .gate[data-ready] .orb,
+  .gate[data-ready] .orb[data-live],
+  .label,
+  .start {
+    opacity: 1;
+    scale: 1;
+    transition: none;
+  }
+
+  .gate[data-ready] .line .label,
+  .gate[data-ready] .start,
+  .gate[data-leaving] .orb,
+  .gate[data-leaving] .label,
+  .gate[data-leaving] .start {
+    animation: none;
+  }
+
+  .orb::before {
+    transition: none;
+  }
+
+  .start:hover,
+  .start:active {
+    transform: none;
+  }
+}
+
+@keyframes gate-in {
+  from {
+    opacity: 0;
+    scale: 0.72;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes gate-out {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+@keyframes orb-out {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.2;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    scale: 0.82;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes label-out {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.8;
+  }
+}
+
+@keyframes start-out {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.88;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

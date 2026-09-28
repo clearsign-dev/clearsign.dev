@@ -1,0 +1,370 @@
+/* Stacking: the stage's sections sit at 12. Header tabs 999, the menu 1000,
+   the logo and the phone trigger 1001 (the logo stays readable over the
+   full-screen phone menu, as on the reference), the smoke 1100. */
+
+.header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.tabs {
+  display: flex;
+  align-items: flex-start;
+  pointer-events: auto;
+}
+
+/* ---- The dark "Menu" tab ---------------------------------------------- */
+
+.tab {
+  --enter-y: -110%;
+  --shift-x: 0px;
+  --press: 1;
+  --fill-x: 50%;
+  --fill-y: 50%;
+  --fill-size: 160px;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 3.5rem;
+  margin: 0;
+  padding: 1.4rem 1.25rem 1.9rem;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.2;
+  word-spacing: var(--word-spacing-mono);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  clip-path: var(--clip-corner);
+  opacity: 0;
+  transform: translate3d(var(--shift-x), var(--enter-y), 0) scale(var(--press));
+  transition-property: transform, opacity, color;
+  transition-duration: 640ms, 640ms, 0.25s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1), cubic-bezier(0.22, 1, 0.36, 1), ease;
+  transition-delay: 0s, 0s, 0s;
+}
+
+.tab.revealed {
+  --enter-y: 0px;
+  opacity: 1;
+  transition-delay: 0.18s, 0.18s, 0s;
+}
+
+/* Once the preloader has gone, the intro phases do the staggering. */
+.noDelay .tab,
+.noDelay .tab.revealed {
+  transition-delay: 0s, 0s, 0s;
+}
+
+.tabBg,
+.fillWrap {
+  position: absolute;
+  inset: 0;
+}
+
+.tabBg {
+  z-index: 0;
+  background: var(--dark);
+}
+
+.fillWrap {
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* The fill grows from where the pointer came in (see header/fill.ts). */
+.fill {
+  position: absolute;
+  top: var(--fill-y);
+  left: var(--fill-x);
+  width: var(--fill-size);
+  height: var(--fill-size);
+  border-radius: 999px;
+  background: var(--accent);
+  transform: translate(-50%, -50%) scale(0);
+  transition:
+    transform 0.72s cubic-bezier(0.625, 0.05, 0, 1),
+    width 0.72s cubic-bezier(0.625, 0.05, 0, 1),
+    height 0.72s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.tabContent {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+}
+
+/* Upright text reading bottom-to-top. */
+.tabLabel {
+  transform: scale(-1, -1);
+}
+
+.tabGlyph {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* Filled: hover, keyboard focus, or the resonance's active flag. Dark text on
+   the accent; it turns as the fill arrives rather than before it. */
+.tabs .tab:focus-visible,
+.tabs .tab[data-active="true"] {
+  color: var(--on-accent);
+  transition-delay: 0s, 0s, 0.2s;
+}
+
+.tab:focus-visible .fill,
+.tab[data-active="true"] .fill {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.tab:focus-visible .tabGlyph {
+  transform: scale(0.7) rotate(90deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tabs .tab:hover {
+    color: var(--on-accent);
+    transition-delay: 0s, 0s, 0.2s;
+  }
+
+  .tab:hover .fill {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .tab:hover .tabGlyph {
+    transform: scale(0.7) rotate(90deg);
+  }
+
+  /* Hovering one tab lifts the other out of the way. */
+  .tabs:has(.ctaSlot:hover) .tab {
+    transform: translate3d(0, -100%, 0);
+    pointer-events: none;
+  }
+
+  .tabs:has(.tab:hover) .ctaSlot {
+    transform: translate3d(0, -100%, 0);
+    pointer-events: none;
+  }
+}
+
+/* ---- The accent CTA tab (the shared Button draws it) -------------------- */
+
+.ctaSlot {
+  display: block;
+  transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (max-width: 767px) {
+  .header {
+    display: none;
+  }
+}
+
+/* ---- Logo ---------------------------------------------------------------- */
+
+/* The wordmark's box has a margin around the mark; the -0.25rem puts the
+   visible glyph where the reference's logo art starts. */
+.logo {
+  position: fixed;
+  top: calc(var(--offset-x) - 0.25rem);
+  left: calc(var(--offset-x) - 0.25rem);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-120%);
+  transition:
+    transform 760ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 760ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.logo.logoRevealed {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.08s;
+}
+
+.logo .wordmark {
+  color: var(--ink);
+}
+
+@media (min-width: 768px) {
+  .logo.logoRevealed.logoTucked {
+    transform: translateY(-150%);
+    transition:
+      transform var(--motion-duration-base) var(--motion-ease-standard),
+      opacity 760ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@media (max-width: 767px) {
+  .logo {
+    top: calc(0.75rem - 0.25rem);
+    left: calc(var(--offset-x-phone) - 0.25rem);
+  }
+
+  /* Over the white phone menu: dark name and signature, white gap. */
+  .logo.logoOnLight {
+    --mark-s: var(--dark);
+    --mark-gap: #fff;
+  }
+
+  .logo.logoOnLight .wordmark {
+    color: var(--dark);
+  }
+}
+
+/* ---- Phone menu trigger -------------------------------------------------- */
+
+.trigger {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .trigger {
+    position: fixed;
+    top: 0.5rem;
+    right: var(--offset-x-phone);
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #fff;
+    pointer-events: auto;
+    mix-blend-mode: difference;
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0;
+    transform: translateY(-110%);
+    transition:
+      transform 640ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 640ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .trigger.triggerRevealed {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.18s;
+  }
+
+  .trigger.noDelay {
+    transition-delay: 0s;
+  }
+
+  .triggerFillWrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: 999px;
+  }
+
+  .triggerFill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160px;
+    height: 160px;
+    border-radius: 999px;
+    background: var(--accent);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.72s cubic-bezier(0.625, 0.05, 0, 1);
+  }
+
+  .triggerContent {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transition: transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .triggerGlyph {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+  }
+
+  /* Press feedback. The data flag covers iOS, where :active is unreliable. */
+  .trigger:active .triggerContent,
+  .trigger[data-pressed="true"] .triggerContent {
+    transform: scale(0.84);
+  }
+
+  .trigger:active .triggerGlyph,
+  .trigger[data-pressed="true"] .triggerGlyph {
+    animation: glyph-tap 460ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .trigger:active .triggerFill,
+  .trigger[data-pressed="true"] .triggerFill {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(1);
+    transition:
+      transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 360ms ease-out;
+  }
+}
+
+@keyframes glyph-tap {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  35% {
+    transform: scale(0.68) rotate(-16deg);
+  }
+  65% {
+    transform: scale(1.1) rotate(8deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab,
+  .ctaSlot,
+  .fill,
+  .tabGlyph,
+  .logo,
+  .trigger,
+  .triggerContent,
+  .triggerGlyph,
+  .triggerFill {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,34 @@
+/* Above the header (999), the menu (1000) and the logo (1001); below the
+   cursor and the preloader. */
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* While the screen is (being) covered, nothing underneath takes clicks. */
+.layer[data-active="true"] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.layer[data-mode="fade"] .canvas {
+  display: none;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  background: var(--ground);
+  opacity: 0;
+}

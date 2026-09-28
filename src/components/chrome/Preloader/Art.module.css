@@ -1,0 +1,344 @@
+/* The circles behind the gate. Easing curves come from the shell
+   (--ease-reveal); the settled transforms are set per breakpoint below. */
+
+.art {
+  --frame: min(691px, 78vmin, calc(100vw - 2rem), calc(100vh - 2rem));
+  --push-shift: 5%;
+  --push-scale: 1.8;
+  --inner-scale: 2;
+
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  color: var(--ink);
+  animation: art-in 1.4s var(--ease-reveal) 0.05s both;
+}
+
+.frame {
+  position: relative;
+  width: var(--frame);
+  height: var(--frame);
+  opacity: 0;
+  transform: scale(0);
+  will-change: transform, opacity;
+  animation: frame-in 0.95s ease-out 0.05s forwards;
+}
+
+.ring,
+.orbit {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.stroke {
+  opacity: 0.5;
+  mix-blend-mode: difference;
+}
+
+.outerRight {
+  animation: push-right 2.8s var(--ease-reveal) 0.25s both;
+}
+
+.outerLeft {
+  animation: push-left 2.8s var(--ease-reveal) 0.25s both;
+}
+
+.inner {
+  opacity: 0;
+  animation:
+    inner-fade 1.2s var(--ease-reveal) 0.2s forwards,
+    inner-grow 2.8s var(--ease-reveal) 0.25s both;
+}
+
+.orbitOuter {
+  animation: orbit-in-cw 2.8s var(--ease-reveal) 0.25s both;
+}
+
+.orbitInner {
+  animation: orbit-in-ccw 2.8s var(--ease-reveal) 0.25s both;
+}
+
+/* Leaving: everything folds back into the centre. */
+.art[data-leaving] .frame {
+  animation: frame-out 0.62s var(--ease-reveal) 0.48s both;
+}
+
+.art[data-leaving] .outerRight {
+  animation: collapse-right 0.8s var(--ease-reveal) both;
+}
+
+.art[data-leaving] .outerLeft {
+  animation: collapse-left 0.8s var(--ease-reveal) both;
+}
+
+.art[data-leaving] .inner {
+  animation: collapse-inner 0.8s var(--ease-reveal) both;
+}
+
+.art[data-leaving] .orbitOuter {
+  animation: orbit-out-cw 0.8s var(--ease-reveal) both;
+}
+
+.art[data-leaving] .orbitInner {
+  animation: orbit-out-ccw 0.8s var(--ease-reveal) both;
+}
+
+@media (max-width: 1400px) {
+  .art {
+    --frame: min(620px, 72vmin, calc(100vw - 2.5rem), calc(100vh - 4rem));
+  }
+}
+
+@media (max-width: 1215px) {
+  .art {
+    --push-shift: 2.5%;
+    --push-scale: 1.5;
+    --inner-scale: 1.75;
+  }
+}
+
+@media (max-width: 1024px) {
+  .art {
+    --frame: min(540px, 66vmin, calc(100vw - 2.5rem), calc(100vh - 6rem));
+  }
+}
+
+@media (max-width: 860px) {
+  .art {
+    --push-shift: 1.4%;
+    --push-scale: 1.32;
+    --inner-scale: 1.45;
+  }
+}
+
+/* Phones: no circles; the gate reveals on the same timing. */
+@media (max-width: 767px) {
+  .frame {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .art {
+    --frame: min(400px, 82vmin, calc(100vw - 1.2rem), calc(100vh - 6.2rem));
+  }
+}
+
+@media (max-width: 555px) {
+  .art {
+    --push-shift: 0.8%;
+    --push-scale: 1.1;
+    --inner-scale: 1.1;
+  }
+}
+
+/* Reduced motion: the circles fade in and out in their settled positions. */
+@media (prefers-reduced-motion: reduce) {
+  .art {
+    animation: fade-in 0.3s ease both;
+  }
+
+  .frame {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .outerRight,
+  .art[data-leaving] .outerRight {
+    transform: translateX(var(--push-shift)) scale(var(--push-scale));
+    animation: none;
+  }
+
+  .outerLeft,
+  .art[data-leaving] .outerLeft {
+    transform: translateX(calc(var(--push-shift) * -1)) scale(var(--push-scale));
+    animation: none;
+  }
+
+  .inner,
+  .art[data-leaving] .inner {
+    opacity: 1;
+    transform: scale(var(--inner-scale));
+    animation: none;
+  }
+
+  .orbitOuter,
+  .orbitInner,
+  .art[data-leaving] .orbitOuter,
+  .art[data-leaving] .orbitInner {
+    animation: none;
+  }
+
+  .art[data-leaving] .frame {
+    animation: fade-out 0.3s ease both;
+  }
+}
+
+@keyframes art-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.985);
+    filter: blur(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes frame-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes frame-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@keyframes push-right {
+  from {
+    transform: translateX(0) scale(0);
+  }
+  to {
+    transform: translateX(var(--push-shift)) scale(var(--push-scale));
+  }
+}
+
+@keyframes push-left {
+  from {
+    transform: translateX(0) scale(0);
+  }
+  to {
+    transform: translateX(calc(var(--push-shift) * -1)) scale(var(--push-scale));
+  }
+}
+
+@keyframes collapse-right {
+  from {
+    transform: translateX(var(--push-shift)) scale(var(--push-scale));
+  }
+  to {
+    transform: translateX(0) scale(0);
+  }
+}
+
+@keyframes collapse-left {
+  from {
+    transform: translateX(calc(var(--push-shift) * -1)) scale(var(--push-scale));
+  }
+  to {
+    transform: translateX(0) scale(0);
+  }
+}
+
+@keyframes inner-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes inner-grow {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(var(--inner-scale));
+  }
+}
+
+@keyframes collapse-inner {
+  from {
+    opacity: 1;
+    transform: scale(var(--inner-scale));
+  }
+  to {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@keyframes orbit-in-cw {
+  from {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes orbit-in-ccw {
+  from {
+    transform: rotate(-180deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes orbit-out-cw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes orbit-out-ccw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-180deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

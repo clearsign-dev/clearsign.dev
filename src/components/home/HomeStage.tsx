@@ -5,6 +5,11 @@ import { AudioEngine } from "@/components/chrome/AudioEngine";
 import { AudioVisualiser } from "@/components/chrome/AudioVisualiser";
 import { CircleBackground } from "@/components/chrome/CircleBackground";
 import { Cursor } from "@/components/chrome/Cursor";
+import { Header } from "@/components/chrome/Header";
+import { LandscapeOverlay } from "@/components/chrome/LandscapeOverlay";
+import { Menu } from "@/components/chrome/Menu";
+import { Preloader } from "@/components/chrome/Preloader/Preloader";
+import { SmokeTransitionLayer } from "@/components/chrome/SmokeTransition";
 import { ScrollIndicator } from "@/components/chrome/ScrollIndicator";
 import { ScrollTracker } from "@/components/chrome/ScrollTracker";
 import { Scrollbar } from "@/components/chrome/Scrollbar";
@@ -12,6 +17,8 @@ import { Contact } from "@/components/sections/Contact";
 import { GetIt } from "@/components/sections/GetIt";
 import { Hero } from "@/components/sections/Hero";
 import { Problem } from "@/components/sections/Problem";
+import { Proof } from "@/components/sections/Proof";
+import { Reads } from "@/components/sections/Reads";
 import { Ships } from "@/components/sections/Ships";
 import { IntroController } from "@/components/stage/IntroController";
 import { Stage, type SectionProps } from "@/components/stage/Stage";
@@ -35,6 +42,8 @@ function placeholder(label: string): ComponentType<SectionProps> {
 const BUILT: Partial<Record<string, ComponentType<SectionProps>>> = {
   hero: Hero,
   problem: Problem,
+  reads: Reads,
+  proof: Proof,
   ships: Ships,
   getIt: GetIt,
   contact: Contact,
@@ -52,6 +61,7 @@ export function HomeStage() {
       <AudioEngine />
       <Stage sections={SECTION_COMPONENTS}>
         <CircleBackground />
+        <Header />
         <ScrollIndicator />
         <Scrollbar />
         {/* Desktop: both place themselves. ≤1024px: this dock lines them up at the bottom. */}
@@ -60,8 +70,12 @@ export function HomeStage() {
           <AudioVisualiser mobileHidden={contactActive} />
         </div>
       </Stage>
-      {/* Outside the stage so it can sit above every layer and invert what it covers. */}
+      <Menu />
+      <SmokeTransitionLayer />
+      {/* Outside the stage so these sit above every layer; the cursor inverts what it covers. */}
       <Cursor />
+      <Preloader />
+      <LandscapeOverlay />
     </>
   );
 }

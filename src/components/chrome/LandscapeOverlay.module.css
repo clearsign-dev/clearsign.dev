@@ -1,0 +1,85 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  /* Above everything, the preloader (10000) included. */
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: color-mix(in srgb, var(--dark) 97%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  touch-action: none;
+  overscroll-behavior: contain;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 280ms ease,
+    visibility 0s linear 280ms;
+}
+
+/* Swallows every tap while shown. */
+.overlay[data-visible] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 280ms ease,
+    visibility 0s;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 22rem;
+  text-align: center;
+}
+
+.icon {
+  width: 64px;
+  height: 64px;
+  color: var(--accent);
+  transform-origin: center;
+}
+
+/* Rocks from sideways back to upright: the motion being asked for. */
+.overlay[data-visible] .icon {
+  animation: rotate-hint 2.4s ease-in-out infinite;
+}
+
+.line {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  word-spacing: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .overlay[data-visible] {
+    transition: none;
+  }
+
+  .overlay[data-visible] .icon {
+    animation: none;
+  }
+}
+
+@keyframes rotate-hint {
+  0%,
+  15% {
+    transform: rotate(-90deg);
+  }
+  55%,
+  100% {
+    transform: rotate(0deg);
+  }
+}

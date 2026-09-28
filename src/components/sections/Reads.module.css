@@ -1,0 +1,60 @@
+/* The right half on desktop, full width below. Positioned, so the cards and
+   the plus marker resolve against it; the hotspot layer is a sibling and
+   resolves against the stage section instead.
+
+   Not a size container: containment would also capture the heading's fixed
+   "[2]" marker, which must resolve against the section like every other. The
+   column width is derived from the viewport instead (the stage hides its
+   scrollbar, so 100vw is the section's width). */
+
+.reads {
+  position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
+  height: 100%;
+  /* Plex Mono advances 0.6em per glyph; the heading's -4px margin gives a
+     little back. */
+  --reads-glyphs: calc(var(--reads-longest-line, 13) * 0.6);
+}
+
+/* The stage switches to mobile choreography at ≤1024px; layout switches with it. */
+@media (min-width: 1025px) {
+  .reads {
+    margin-left: var(--offset-content);
+  }
+}
+
+.headingLine {
+  white-space: nowrap;
+}
+
+/* "H2 Large" (the reference's 104px, 96px from 550 to 1110), capped so the
+   longer line never leaves its column. At 550px and below the Heading's own
+   clamp applies unchanged. */
+@media (min-width: 551px) and (max-width: 1024px) {
+  .reads {
+    /* Full width inside the phone insets, less the heading's 1.68rem pad. */
+    --reads-heading-size: min(
+      calc(var(--h2-large-size) * 96 / 104),
+      calc((100vw - 2 * var(--offset-x-phone) - 1.68rem + 4px) / var(--reads-glyphs))
+    );
+  }
+
+  h2.heading {
+    font-size: var(--reads-heading-size);
+  }
+}
+
+@media (min-width: 1025px) {
+  .reads {
+    /* The right half of the content box. */
+    --reads-heading-size: min(
+      var(--h2-large-size),
+      calc(((100vw - 2 * var(--offset-x)) / 2 + 4px) / var(--reads-glyphs))
+    );
+  }
+
+  h2.heading {
+    font-size: var(--reads-heading-size);
+  }
+}

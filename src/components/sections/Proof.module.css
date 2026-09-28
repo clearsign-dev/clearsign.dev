@@ -1,0 +1,202 @@
+/* Heading, CTA and record from the top left; the statement anchored to the
+   bottom. The bottom group is absolutely placed so a tall top group never
+   pushes the statement off screen. */
+
+.proof {
+  position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1025px) {
+  .proof {
+    padding-top: var(--offset-content-top);
+  }
+}
+
+@media (max-width: 1024px) {
+  .proof {
+    padding-top: 4.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .proof {
+    padding-top: 4.75rem;
+  }
+}
+
+/* Above the phone/tablet readability scrim, which hangs off the statement. */
+.top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.6rem;
+}
+
+/* As wide as the heading's longest line, so the CTA spans it: "IT CAUGHT" at
+   72px Plex Mono is about 24rem (the reference's 21rem fits its "PARTNER"). */
+.wrap {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+@media (max-width: 1024px) {
+  .wrap {
+    max-width: 26rem;
+  }
+}
+
+@media (min-width: 2245px) {
+  .wrap {
+    max-width: 34rem;
+  }
+}
+
+.headingWrap {
+  will-change: transform;
+}
+
+.headingLine {
+  white-space: nowrap;
+}
+
+/* ---- CTA -------------------------------------------------------------- */
+
+.cta {
+  transform-origin: left center;
+  will-change: transform, opacity, clip-path;
+}
+
+@media (max-width: 767px) {
+  .ctaTop {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .ctaBottom {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .ctaBottom {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+}
+
+/* ---- Bottom group ----------------------------------------------------- */
+
+.footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.footer > * {
+  pointer-events: auto;
+}
+
+@media (max-width: 767px) {
+  .footer {
+    justify-content: flex-end;
+    gap: 1.5rem;
+  }
+}
+
+/* The statement: display type, dim, with the verdict lit. The em measure is
+   the reference's 22em carried over to the wider face at 0.9 size. */
+.statement {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 0 auto;
+  padding-bottom: 3.5rem;
+  max-width: 24.5em;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  text-transform: uppercase;
+  word-spacing: normal;
+  font-size: 1.35rem;
+  line-height: 1.333;
+  color: color-mix(in srgb, var(--grey-400) 60%, var(--grey-100));
+  /* One soft shadow for the whole block: per-glyph shadows on split text read
+     as a row of blurred boxes. */
+  filter: drop-shadow(0 2px 4px rgb(4 7 13 / 0.26)) drop-shadow(0 8px 20px rgb(4 7 13 / 0.2));
+}
+
+.highlight {
+  position: relative;
+  display: inline-block;
+  color: var(--ink);
+}
+
+@media (min-width: 2245px) {
+  .statement {
+    font-size: 2.7rem;
+    line-height: 1;
+  }
+}
+
+@media (max-width: 1024px) {
+  .statement {
+    margin: 0;
+    font-size: 16.2px;
+    line-height: 0.95;
+    word-spacing: var(--word-spacing-mono);
+    color: var(--text);
+    filter: none;
+  }
+
+  /* Readability scrim: the scene fades into the ground behind the copy. It
+     hangs off the text block, so browser chrome and odd viewport heights
+     cannot leave the copy outside it; the section clips the overshoot. */
+  .statement::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--offset-x-phone));
+    width: 100vw;
+    top: -7rem;
+    bottom: -100vh;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--scrim-opacity, 1);
+    background: linear-gradient(180deg, transparent 0, var(--ground) 6rem);
+    will-change: opacity;
+  }
+
+  .highlight {
+    color: var(--ink);
+  }
+}
+
+@media (max-width: 767px) {
+  .statement {
+    padding-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .headingWrap,
+  .cta {
+    transform: none !important;
+    clip-path: none !important;
+  }
+}
