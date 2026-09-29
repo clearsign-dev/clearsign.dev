@@ -1,23 +1,15 @@
-// Every word on the site. Sourced from docs/website-brief.md (in the repository
-// root); every number here is one the brief lists as safe in Part 11. Section
-// components render this and never write their own copy.
-//
-// The brief's "never claim" list binds everything below: nothing here says the
-// project is audited, production-ready or safe for real funds; that it holds
-// keys or signs for anyone; that it has users, customers or partners; that it
-// runs on hardware; or that it covers EIP-712, Bitcoin or anything outside the
-// closed v1 set.
+// Public copy. Support and verification claims are maintained in the main
+// repository; historical design briefs are not current release evidence.
 
-export const REPO_URL = "https://github.com/AnticsDecoded/clearsign";
+export const REPO_URL = "https://github.com/clearsign-dev/clearsign";
 export const RELEASES_URL = `${REPO_URL}/releases`;
-// The address the contact form writes to. It opens the reader's own mail
-// client; nothing is posted anywhere. Replace before publishing.
-export const CONTACT_EMAIL = "hello@clearsign.dev";
+export const ISSUES_URL = `${REPO_URL}/issues/new/choose`;
+export const SECURITY_URL = `${REPO_URL}/security/advisories/new`;
 
 export const WARNING = {
   label: "Before you download",
-  headline: "Early development. Unaudited beyond one review. Not for real funds.",
-  body: "Reviewing a transaction is safe on any computer. The signing and seed commands are locked behind an environment variable, because a recovery phrase typed into an everyday machine must be treated as exposed.",
+  headline: "Developer preview. Not for real keys or funds.",
+  body: "The reviewer needs no keys and signs nothing. Its display depends on the computer running it. Decoding does not verify contract behaviour; compare the hash on your signing device and follow your existing approval procedure.",
 } as const;
 
 export const PRELOADER = {
@@ -52,15 +44,15 @@ export const HERO = {
   metaSecondary: "Reviews offline",
   metaTertiary: "Early development",
   clockLabel: "UTC",
-  heading: ["See exactly", "what you are", "about to sign"],
+  heading: ["ClearSign", "Review before", "you sign"],
 } as const;
 
 // 1 — The problem. Anatomy: the reference About.
 export const PROBLEM = {
   heading: ["Nobody reads", "the bytes"],
   paragraphs: [
-    "Your hardware wallet shows you a hash. Your multisig interface shows you a summary produced by a service. Neither of those is the transaction.",
-    "They are descriptions of it, and a description can be wrong. On 21 February 2025 that gap cost Bybit about $1.5 billion.",
+    "A multisig interface can show a plausible summary while asking you to approve different bytes. A hash comparison helps bind the review to the signature, but does not explain the transaction.",
+    "The Bybit theft on 21 February 2025 showed the consequences of a compromised signing interface: about $1.5 billion was stolen.",
   ],
 } as const;
 
@@ -76,18 +68,18 @@ export const READS = {
       summary: "EVM transactions and Safe multisig",
       items: [
         "EIP-1559 and legacy transactions, strict canonical RLP",
-        "ERC-20 transfer, transferFrom and approve",
+        "ERC-20-shaped transfer, transferFrom and approve calls",
         "Unlimited approvals named as unlimited",
         "Safe execTransaction, with the inner call and its operation",
         "The Safe transaction hash, recomputed locally",
-        "Nine Safe administration calls, every one CRITICAL",
+        "Safe administration changes flagged for review",
       ],
     },
     {
       title: "Batches, QR and agents",
       summary: "What arrives by batch, camera or assistant",
       items: [
-        "MultiSend batches, with every inner call shown",
+        "MultiSend batches, with explicit display and parsing limits",
         "Only Safe's 11 published MultiSend deployments",
         "On the 2,089 address-chain pairs they are published for",
         "Air-gapped QR requests over Uniform Resources and EIP-4527",
@@ -102,7 +94,7 @@ export type Severity = "INFO" | "WARNING" | "CRITICAL" | "BLIND";
 
 // 3 — Proof. Anatomy: the reference Collaboration.
 export const PROOF = {
-  heading: ["It caught", "Bybit"],
+  heading: ["The Bybit", "test case"],
   cta: "Repeat it yourself",
   ctaHref: REPO_URL,
   // The large statement across the bottom; `highlight` is lit.
@@ -126,34 +118,34 @@ export const PROOF = {
     ],
     verdict: "DO NOT SIGN",
     footnote:
-      "The record came from Safe's own production transaction service. It lives in the repository as a test fixture, with the curl command that fetched it.",
+      "A retrospective test using Safe's production record. ClearSign did not prevent this incident. The fixture and its source command are in the repository.",
   },
   severities: [
-    { severity: "INFO" as Severity, text: "Nothing alarming" },
+    { severity: "INFO" as Severity, text: "Context and limitations" },
     { severity: "WARNING" as Severity, text: "Worth a second look" },
     { severity: "CRITICAL" as Severity, text: "Delegatecall, owner, module or guard changes, unlimited approvals" },
     { severity: "BLIND" as Severity, text: "Anything it does not fully understand" },
   ],
-  exitCodes: "Exit 0: nothing alarming. Exit 2: could not be decoded. Exit 3: something CRITICAL.",
+  exitCodes: "Exit 0: no BLIND or CRITICAL findings, not a safety guarantee. Exit 2: BLIND content. Exit 3: CRITICAL findings.",
 } as const;
 
 // 4 — Evidence. Anatomy: the reference Blog slider.
 export const EVIDENCE = {
   heading: ["The evidence"],
   description:
-    "Everything here is reproducible from the repository, including the part about what is not true yet.",
+    "Tests and recorded experiments are documented in the repository. Results apply to the versions and environments tested.",
   slides: [
     {
       kicker: "Testing",
-      figure: "170",
-      title: "Tests across the workspace",
-      body: "Twelve invariants, each with named tests. All 24 official BIP-39 English vectors.",
+      figure: "CI",
+      title: "Workspace regression tests",
+      body: "Run cargo test --workspace --release --locked for current results. The verification record documents the coverage and known gaps.",
     },
     {
       kicker: "Fuzzing",
       figure: "~306M",
-      title: "Fuzz executions, zero failures",
-      body: "Seven cargo-fuzz targets with security properties asserted on every input.",
+      title: "Recorded fuzz executions",
+      body: "Historical runs across seven targets. The record includes assertions later found inadequate; execution counts are not a security guarantee.",
     },
     {
       kicker: "Differential",
@@ -163,33 +155,33 @@ export const EVIDENCE = {
     },
     {
       kicker: "Planted bugs",
-      figure: "2",
-      title: "Not caught, and written down",
-      body: "Bugs were planted to prove the tests can fail. Two got through. One exposed a test passing for the wrong reason, and was fixed. The other is documented as defensive.",
+      figure: "Faults",
+      title: "Tests checked with planted bugs",
+      body: "Deliberately reintroducing bugs exposed tests that passed incorrectly. The verification record describes corrections and remaining gaps.",
     },
     {
       kicker: "Reproducible",
       figure: "1",
       title: "Canonical build environment",
-      body: "Two builds produce identical binaries. Across compiler hosts they do not, and that was measured rather than assumed.",
+      body: "Recorded aarch64 Linux builds matched in the canonical environment, including on a second machine. This does not cover all desktop installers or compiler hosts.",
     },
     {
       kicker: "Supply chain",
       figure: "1,057",
-      title: "GrapheneOS projects pinned",
-      body: "Every borrowed component fetched and verified from one pinned file. Signatures checked against pinned keys.",
+      title: "GrapheneOS manifest entries",
+      body: "The recorded source-import check pinned 1,057 projects and verified the manifest tag against a pinned key. This is a supply-chain check, not a claim that ClearSign has GrapheneOS's security properties.",
     },
     {
       kicker: "Review",
-      figure: "10 / 10",
-      title: "Findings closed",
-      body: "One external review, ten findings, all reproduced and closed. Nine of those fixes changed signing-critical code nobody outside has read since.",
+      figure: "Open",
+      title: "Independent re-review still needed",
+      body: "The verification record separates the reported September human review from later AI-assisted checks. Changed signing-critical code still needs independent human assessment.",
     },
     {
       kicker: "Not true yet",
       figure: "0",
       title: "Users",
-      body: "No hardware root of trust. Everything runs under emulation. Binaries unsigned. No EIP-712. EVM only.",
+      body: "No established user base. Signing hardware remains experimental; binaries are unsigned. Selected EVM formats only, with no general EIP-712 support.",
       gap: true,
     },
   ],
@@ -211,14 +203,14 @@ export const SHIPS = {
     {
       id: "02",
       name: "Command line",
-      detail: "Reads Safe's own JSON export and ignores its dataDecoded field on principle. Exit codes for scripts.",
+      detail: "Reads Safe transaction JSON and ignores the service's dataDecoded description. Exit codes distinguish decoding findings.",
       status: "Read-only",
       icon: "terminal",
     },
     {
       id: "03",
       name: "Signer image",
-      detail: "A Linux image whose entire userland is one program, on a kernel built without a network stack. Not disabled. Absent.",
+      detail: "An experimental Linux image with a single user program and a kernel built without a network stack.",
       status: "Emulation only",
       icon: "chip",
     },
@@ -243,7 +235,7 @@ export const GET_IT = {
     },
     {
       title: "Review",
-      body: "clearsign safe-json tx.json --chain-id 1. Reviewing is read-only and safe on any computer.",
+      body: "Review a historical transaction locally. No recovery phrase or private key is needed; the host computer remains part of the trust boundary.",
       command: "clearsign safe-json tx.json --chain-id 1",
     },
     {
@@ -257,19 +249,11 @@ export const GET_IT = {
 // 7 — Contact. Anatomy: the reference Contact.
 export const CONTACT = {
   heading: ["Tell us what", "it missed"],
-  lead: "The most useful thing anyone can send is a transaction this read badly.",
-  fields: {
-    name: { label: "Name", placeholder: "Your name or alias" },
-    email: { label: "Email", placeholder: "you@example.com" },
-    message: { label: "Message", placeholder: "Paste the transaction, or say what it got wrong" },
-  },
-  submit: "Send",
-  submitCursor: "Open mail",
-  errors: {
-    required: "Required",
-    email: "That doesn't look like an email address",
-  },
-  sentNote: "Your mail client should have opened with this message in it.",
+  lead: "Bug reports and historical transactions help improve the reviewer. Security reports belong in a private advisory.",
+  issueLabel: "Report a bug",
+  issueNote: "GitHub issues are public. Do not include keys, recovery phrases or confidential transaction data.",
+  securityLabel: "Report a vulnerability",
+  securityNote: "Private GitHub reporting for suspected security vulnerabilities.",
   credit: { prefix: "Layout after", name: "daoism.systems", href: "https://daoism.systems" },
   licence: "MIT OR Apache-2.0",
   privacy: "Privacy",
@@ -279,11 +263,11 @@ export const SOCIALS = [{ label: "GitHub", href: REPO_URL, icon: "github" }] as 
 
 export const PRIVACY = {
   title: ["Privacy"],
-  updated: "28 September 2026",
+  updated: "29 September 2026",
   paragraphs: [
     "This site sets no cookies, runs no analytics and loads nothing from anyone else. The fonts are served from here. The sound is synthesised in your browser.",
-    "The contact form does not send anything. It opens your own mail client with the message filled in, and you decide whether to send it.",
-    "ClearSign itself makes no network calls while reviewing a transaction. The desktop app keeps its review history in its own local storage and sends it nowhere.",
+    "This site does not collect contact details. Support links open GitHub, where public issues and private security advisories are handled under GitHub's privacy policy.",
+    "The ClearSign decoder works locally. The application's optional fetch-by-hash feature contacts Safe's transaction service. Review history is kept in local storage on the computer running the app.",
   ],
 } as const;
 

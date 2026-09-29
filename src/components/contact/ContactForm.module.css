@@ -1,4 +1,4 @@
-/* The contact form's layout. See docs/research/components/contact.spec.md. */
+/* Support routes share the contact section's reveal timing. */
 
 .form {
   display: flex;
@@ -30,7 +30,7 @@
   will-change: opacity, clip-path;
 }
 
-/* The sent note: empty (and so zero-height) until a mailto: has been handed off. */
+/* Describes what belongs in each reporting channel. */
 .status {
   margin: 0.6rem 0 0 0.25rem;
   color: var(--grey-300);
