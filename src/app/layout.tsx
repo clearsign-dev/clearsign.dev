@@ -19,10 +19,10 @@ const plexMono = IBM_Plex_Mono({
 });
 
 const description =
-  "ClearSign reads the transaction in front of you and tells you what those bytes actually do, from the bytes alone. Reviews offline, with no knowledge of your wallet and no opinion from any service.";
+  "Review Safe and supported EVM transactions locally. ClearSign decodes signed fields, recomputes hashes and reports risks and unknowns. Developer preview.";
 
 export const metadata: Metadata = {
-  title: "ClearSign: see exactly what you are about to sign",
+  title: "ClearSign | Local transaction review",
   description,
   applicationName: "ClearSign",
   openGraph: {

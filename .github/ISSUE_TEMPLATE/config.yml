@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Transaction reviewer bug
+    url: https://github.com/clearsign-dev/clearsign/issues/new/choose
+    about: Report incorrect decoding or application behaviour in the main repository.
+  - name: Private security report
+    url: https://github.com/clearsign-dev/clearsign/security/advisories/new
+    about: Report a suspected vulnerability privately. Do not post keys or recovery phrases.

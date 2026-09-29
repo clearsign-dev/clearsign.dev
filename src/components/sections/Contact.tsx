@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { blockReveal, rise } from "@/components/contact/blockReveal";
 import { Heading } from "@/components/reveal/Heading";
@@ -101,9 +102,9 @@ export function Contact({ progress }: SectionProps) {
             <footer className={styles.footer}>
               <p style={blockReveal(slice(beats.footerPrimary), 72, reduced)}>{CONTACT.licence}</p>
               <p style={blockReveal(slice(beats.footerSecondary), 80, reduced)}>
-                <a className={styles.footerLink} href="/privacy" onMouseEnter={hoverSound}>
+                <Link className={styles.footerLink} href="/privacy" onMouseEnter={hoverSound}>
                   {CONTACT.privacy}
-                </a>
+                </Link>
               </p>
             </footer>
           </div>

@@ -296,7 +296,7 @@ export function Menu() {
             variant="accent"
             label={MENU.contact}
             className={styles.ctaButton}
-            cursorLabel={CONTACT.submit}
+            cursorLabel={CONTACT.issueLabel}
             onClick={() => go(SECTION_INDEX.contact)}
           />
         </div>
