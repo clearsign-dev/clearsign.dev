@@ -49,7 +49,7 @@ export const HEADER = {
 // 0 — Opening. Anatomy: the reference hero.
 export const HERO = {
   metaPrimary: "Reads a transaction from the raw bytes",
-  metaSecondary: "No network",
+  metaSecondary: "Reviews offline",
   metaTertiary: "Early development",
   clockLabel: "UTC",
   heading: ["See exactly", "what you are", "about to sign"],
