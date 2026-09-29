@@ -8,9 +8,9 @@
 #   - Settings -> Pages -> Source must be set to "GitHub Actions" once, by hand.
 #     Nothing here can set it for you.
 #
-# Served at a custom domain (clearsign.dev) the paths are right as they are. If
-# it is ever served from a subpath such as <org>.github.io/clearsign.dev/, set
-# basePath and assetPrefix in next.config.ts or every asset will 404.
+# The base path is taken from what Pages reports, so the same workflow serves
+# the site correctly at <org>.github.io/clearsign.dev/ and at a custom domain
+# later, with nothing to edit in between.
 name: deploy
 
 on:
@@ -41,11 +41,19 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - id: pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - name: Install exactly what the lockfile names
         run: npm ci
       - name: Build
-        run: npm run build
+        # Pages reports where the site will live. At <org>.github.io/<repo>/ that
+        # is a subpath, and without it every asset on the page 404s. On a custom
+        # domain it comes back empty and nothing changes.
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: |
+          echo "building for base path: '${BASE_PATH:-/}'"
+          npm run build
       - name: Check the export is really static
         run: |
           set -euo pipefail
