@@ -89,7 +89,7 @@ export const READS = {
       items: [
         "MultiSend batches, with every inner call shown",
         "Only Safe's 11 published MultiSend deployments",
-        "On the 1,404 address-chain pairs they are published for",
+        "On the 2,089 address-chain pairs they are published for",
         "Air-gapped QR requests over Uniform Resources and EIP-4527",
         "Wallet claims checked against the signed bytes",
         "AI agent plans, traced and approved finding by finding",
