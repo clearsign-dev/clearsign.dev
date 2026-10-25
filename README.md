@@ -1,6 +1,6 @@
 # ClearSign Website
 
-Source for the [ClearSign website](https://clearsign-dev.github.io/clearsign.dev/). The decoder, desktop application, CLI and experimental platform live in [clearsign-dev/clearsign](https://github.com/clearsign-dev/clearsign).
+Source for the [ClearSign website](https://clearsign-dev.github.io/clearsign.dev/). The review engine, desktop and mobile clients, embedding interfaces, CLI and experimental signer platform live in [clearsign-dev/clearsign](https://github.com/clearsign-dev/clearsign).
 
 ## Development
 

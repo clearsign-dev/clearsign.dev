@@ -40,8 +40,8 @@ export const HEADER = {
 
 // 0 — Opening. Anatomy: the reference hero.
 export const HERO = {
-  metaPrimary: "Reads a transaction from the raw bytes",
-  metaSecondary: "Reviews offline",
+  metaPrimary: "Independent transaction verification",
+  metaSecondary: "Reads the signed fields locally",
   metaTertiary: "Early development",
   clockLabel: "UTC",
   heading: ["ClearSign", "Review before", "you sign"],
@@ -181,7 +181,7 @@ export const EVIDENCE = {
       kicker: "Not true yet",
       figure: "0",
       title: "Users",
-      body: "No established user base. Signing hardware remains experimental; binaries are unsigned. Selected EVM formats only, with no general EIP-712 support.",
+      body: "No established user base. Mobile builds and signing hardware remain evaluation work; desktop binaries are unsigned. Bitcoin, Solana and broad DeFi coverage are outside the current engine.",
       gap: true,
     },
   ],
@@ -191,7 +191,7 @@ export const EVIDENCE = {
 export const SHIPS = {
   heading: ["How it", "ships"],
   sup: "5",
-  paragraph: "The same Rust core, in three shapes, and a prototype of what sits above them.",
+  paragraph: "One Rust review engine across desktop, mobile and host integrations, plus an experimental signer platform.",
   cards: [
     {
       id: "01",
@@ -202,24 +202,24 @@ export const SHIPS = {
     },
     {
       id: "02",
-      name: "Command line",
-      detail: "Reads Safe transaction JSON and ignores the service's dataDecoded description. Exit codes distinguish decoding findings.",
-      status: "Read-only",
-      icon: "terminal",
+      name: "Mobile clients",
+      detail: "A React Native phone and tablet reviewer for iOS and Android, backed by the same local Rust engine.",
+      status: "Evaluation source",
+      icon: "desktop",
     },
     {
       id: "03",
-      name: "Signer image",
-      detail: "An experimental Linux image with a single user program and a kernel built without a network stack.",
-      status: "Emulation only",
-      icon: "chip",
+      name: "Embedding API",
+      detail: "Versioned Rust, WebAssembly and caller-owned C interfaces for wallets, custody software and signing hardware.",
+      status: "Integration ready",
+      icon: "terminal",
     },
     {
       id: "04",
-      name: "Compartments",
-      detail: "seL4 runs an untrusted Linux beside the signer. Linux tries to write the review region, and seL4 blocks it.",
-      status: "Emulated prototype",
-      icon: "layers",
+      name: "Signer platform",
+      detail: "An experimental seL4 and Linux signer image exploring isolated review and signing on dedicated hardware.",
+      status: "Emulation only",
+      icon: "chip",
     },
   ],
 } as const;

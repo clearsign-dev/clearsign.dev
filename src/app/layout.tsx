@@ -19,10 +19,10 @@ const plexMono = IBM_Plex_Mono({
 });
 
 const description =
-  "Review Safe and supported EVM transactions locally. ClearSign decodes signed fields, recomputes hashes and reports risks and unknowns. Developer preview.";
+  "Independent transaction verification for high-value crypto signing. ClearSign decodes supported signed fields locally, recomputes hashes and reports risks and unknowns. Developer preview.";
 
 export const metadata: Metadata = {
-  title: "ClearSign | Local transaction review",
+  title: "ClearSign | Independent transaction verification",
   description,
   applicationName: "ClearSign",
   openGraph: {
